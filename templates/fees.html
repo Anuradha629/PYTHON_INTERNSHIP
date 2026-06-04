@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Fees Details</h2>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Total Fees</th>
+    <th>Paid Fees</th>
+    <th>Pending Fees</th>
+</tr>
+
+{% for f in fees %}
+<tr>
+    <td>{{ f.name }}</td>
+    <td>{{ f.total_fees }}</td>
+    <td>{{ f.paid_fees }}</td>
+    <td>{{ f.pending_fees }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

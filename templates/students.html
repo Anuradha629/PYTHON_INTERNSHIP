@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Students</h2>
+<p>This page provides information about students, their subjects and class schedules.<br>
+It helps in maintaining accurate student records and effective class management.</p>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Subject</th>
+    <th>Time</th>   
+</tr>
+
+{% for s in students %}
+<tr>
+    <td>{{ s.name }}</td>
+    <td>{{ s.subject }}</td>
+    <td>{{ s.time }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

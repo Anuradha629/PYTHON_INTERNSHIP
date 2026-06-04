@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Bright Future Classes</h2>
+
+<p><b>Location:</b> {{ institute.location }}</p>
+
+<p><b>Pin code:</b> {{ institute['Pin code'] }}</p>
+
+<p><b>Contact:</b> {{ institute.contact }}</p>
+
+
+<p><b>Email:</b> {{ institute.email }}</p>
+
+
+<p>
+Welcome to Bright Future Classes.<br>
+This system helps manage students, teachers, attendance and fees in an organized and efficient way.
+</p>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coaching Class Manager</title>
+</head>
+<body>
+
+<h1>Coaching Class Manager</h1>
+
+<nav>
+    <a href="{{ url_for('home') }}">Home</a> 
+    <a href="{{ url_for('students_page') }}">Students</a> 
+    <a href="{{ url_for('teachers_page') }}">Teachers</a> 
+    <a href="{{ url_for('attendance_page') }}">Attendance</a> 
+    <a href="{{ url_for('fees_page') }}">Fees</a>
+</nav>
+
+<hr>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
+    

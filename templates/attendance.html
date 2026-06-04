@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Attendance</h2>
+<p>This page maintains student attendance records to ensure regular participation in classes.</p>
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Status</th>
+</tr>
+
+{% for a in attendance %}
+<tr>
+    <td>{{ a.name }}</td>
+    <td>{{ a.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

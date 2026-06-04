@@ -9,7 +9,8 @@ students = [
         "attendance": 85
     },
 
-    {
+    
+        {
         "name": "Anuradha",
         "subject": "Python",
         "batch": "B", 
@@ -19,8 +20,7 @@ students = [
        
     },
 
-    {   
-        "name":"Sunita",
+    {   "name":"Sunita",
         "subject": "Python",
         "batch": "A", 
         "fees_paid": 1800, 

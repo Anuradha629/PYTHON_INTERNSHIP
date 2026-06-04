@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Teachers</h2>
+<p>
+Our teachers are dedicated to providing quality education and personal guidance to every student.<br>
+With strong subject knowledge and teaching experience, they help students build confidence and achieve academic success.<br>
+We believe that good teachers inspire learning, discipline and growth.
+</p>
+</table>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Subject</th>
+    <th>Eeperience</th>
+</tr>
+
+{% for t in teachers %}
+<tr>
+    <td>{{ t.name }}</td>
+    <td>{{ t.subject }} </td>
+    <td>{{ t.experience }}</td>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
