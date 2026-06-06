@@ -38,7 +38,7 @@ students = [
     },
 
     {
-        "name": "Rohit",
+        "name": "Mina",
         "subject": "Python",
         "batch": "A", 
         "fees_paid": 4000, 
