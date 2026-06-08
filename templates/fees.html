@@ -2,83 +2,23 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<h2>Fees Details</h2>
 
-    <div class="card shadow-lg border-0">
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Total Fees</th>
+    <th>Paid Fees</th>
+    <th>Pending Fees</th>
+</tr>
 
-        <div class="card-header bg-primary text-white">
-            <h2 class="mb-0">
-                💰 Fees Management
-            </h2>
-        </div>
-
-        <div class="card-body">
-
-            <table class="table table-hover table-striped align-middle">
-
-                <thead class="table-dark">
-                    <tr>
-                        <th></th>
-                        <th>Student Name</th>
-                        <th>Total Fees</th>
-                        <th>Paid Fees</th>
-                        <th>Pending Fees</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for f in fees %}
-                    <tr>
-
-                        <td>{{ loop.index }}</td>
-
-                        <td class="fw-semibold">
-                            {{ f.name }}
-                        </td>
-
-                        <td>
-                            <span class="badge bg-primary fs-6">
-                                ₹{{ f.total_fees }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-success fs-6">
-                                ₹{{ f.paid_fees }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-warning text-dark fs-6">
-                                ₹{{ f.pending_fees }}
-                            </span>
-                        </td>
-
-                        <td>
-                            {% if f.pending_fees == 0 %}
-                                <span class="badge bg-success">
-                                    Paid
-                                </span>
-                            {% else %}
-                                <span class="badge bg-danger">
-                                    Pending
-                                </span>
-                            {% endif %}
-                        </td>
-
-                    </tr>
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-
+{% for f in fees %}
+<tr>
+    <td>{{ f.name }}</td>
+    <td>{{ f.total_fees }}</td>
+    <td>{{ f.paid_fees }}</td>
+    <td>{{ f.pending_fees }}</td>
+</tr>
+{% endfor %}
+</table>
 {% endblock %}

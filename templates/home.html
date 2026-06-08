@@ -2,84 +2,20 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<h2>Bright Future Classes</h2>
 
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">🎓 Coaching Class Manager</h1>
+<p><b>Location:</b> {{ institute.location }}</p>
 
-        <p class="lead text-muted">
-            Welcome to Bright Future Classes
-        </p>
-    </div>
+<p><b>Pin code:</b> {{ institute['Pin code'] }}</p>
 
-    <div class="card shadow mb-4">
-        <div class="card-body">
+<p><b>Contact:</b> {{ institute.contact }}</p>
 
-            <h3 class="text-primary">Bright Future Classes</h3>
+<p><b>Email:</b> {{ institute.email }}</p>
 
-            <p><strong>Location:</strong> Ahilyanagar, Hingoli</p>
-            <p><strong>Pin Code:</strong> 431513</p>
-            <p><strong>Contact:</strong> +91 8596XXXXXX</p>
-            <p><strong>Email:</strong> brightfuture@gmail.com</p>
+<p>
+Welcome to Bright Future Classes.<br>
 
-        </div>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-body">
-
-            <h3>Welcome to Bright Future Classes</h3>
-
-            <p>
-                This system helps manage students, teachers,
-                attendance and fees in an organized and efficient way.
-                It provides a simple platform for maintaining academic
-                records and class information.
-            </p>
-
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h2>👨‍🎓</h2>
-                    <h5>Students</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h2>👨‍🏫</h2>
-                    <h5>Teachers</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h2>📅</h2>
-                    <h5>Attendance</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow text-center">
-                <div class="card-body">
-                    <h2>💰</h2>
-                    <h5>Fees</h5>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+This system helps manage students, teachers, attendance and fees in an organized and efficient way.
+</p>
 
 {% endblock %}

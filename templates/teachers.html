@@ -2,141 +2,30 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<h2>Teachers</h2>
 
-    <!-- Page Header -->
-    <div class="card bg-primary text-white shadow-lg mb-4">
-        <div class="card-body text-center">
-            <h1 class="display-5 fw-bold">
-                👨‍🏫 Our Faculty Team
-            </h1>
+<p>
+    Our teachers are dedicated to providing quality education and personal guidance to every student.<br>
 
-            <p class="lead mb-0">
-                Experienced teachers dedicated to academic excellence,
-                student success and personal growth.
-            </p>
-        </div>
-    </div>
+    With strong subject knowledge and teaching experience, they help students build confidence and achieve academic success.<br>
 
-    <!-- Faculty Statistics -->
+    We believe that good teachers inspire learning, discipline and growth.
+</p>
 
-    <div class="row mb-4">
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Subject</th>
+        <th>Experience</th>
+    </tr>
 
-        <div class="col-md-4">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h2 class="text-primary">
-                        {{ teachers|length }}
-                    </h2>
-                    <h5>Total Teachers</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h2 class="text-success">
-                        15+
-                    </h2>
-                    <h5>Years Combined Experience</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h2 class="text-warning">
-                        100%
-                    </h2>
-                    <h5>Active Faculty</h5>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- About Faculty -->
-
-    <div class="alert alert-info shadow">
-        <strong>Faculty Information:</strong>
-        Our teachers provide quality education, regular assessments,
-        doubt-solving sessions and personal guidance to help students
-        achieve their academic goals.
-    </div>
-
-    <!-- Teachers Table -->
-
-    <div class="card shadow-lg">
-
-        <div class="card-header bg-dark text-white">
-            Faculty Details
-        </div>
-
-        <div class="card-body">
-
-            <table class="table table-striped table-hover table-bordered align-middle">
-
-                <thead class="table-dark">
-
-                    <tr>
-                        <th>ID</th>
-                        <th>Teacher Name</th>
-                        <th>Subject</th>
-                        <th>Experience</th>
-                        <th>Qualification</th>
-                        <th>Status</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {% for t in teachers %}
-
-                    <tr>
-
-                        <td>{{ loop.index }}</td>
-
-                        <td class="fw-bold">
-                            {{ t.name }}
-                        </td>
-
-                        <td>
-                            <span class="badge bg-info text-dark">
-                                {{ t.subject }}
-                            </span>
-                        </td>
-
-                        <td>
-                            {{ t.experience }} Years
-                        </td>
-
-                        <td>
-                            <span class="badge bg-secondary">
-                                M.E
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-success">
-                                Active
-                            </span>
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
+    {% for t in teachers %}
+    <tr>
+        <td>{{ t.name }}</td>
+        <td>{{ t.subject }}</td>
+        <td>{{ t.experience }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
