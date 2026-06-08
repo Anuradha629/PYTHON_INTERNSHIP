@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -16,17 +17,17 @@ students = [
     {"name": "Vaishnvi", "subject": "Java", "time": "8:30 AM - 10:30 AM"},
     {"name": "Rutuja", "subject": "Microprecessor", "time": "11:00 AM - 12:00 PM"},
     {"name": "Aarti", "subject": "Data communication", "time": "4:00 PM - 5:00 PM"},
-    {"name": "Shivani", "subject": "C++", "time": "7:00 PM - 8:00 PM"},
+    {"name": "Shivani", "subject": "C", "time": "7:00 PM - 8:00 PM"},
     {"name": "Pooja", "subject": "C++", "time": "7:00 PM - 8:00 PM"},
    
 ]
     
 teachers = [
-    {"name": "Dr. Sharma", "subject": "Python", "experience": 10},
-    {"name": "Mrs. Joshi", "subject": "Java", "experience": 8},
-    {"name": "Mr. Patel", "subject": "Microprecessor", "experience": 12},
-    {"name": "Ms. Deshmukh", "subject": "Data communication", "experience": 7},
-    {"name": "Mr. Singh", "subject": "C++", "experience": 9}    
+    {"name": "Mehta sir", "subject": "Python", "experience": 10},
+    {"name": "Satore sir", "subject": "Java", "experience": 8},
+    {"name": "Zelam mam", "subject": "Microprecessor", "experience": 12},
+    {"name": "Patil mam", "subject": "Data communication", "experience": 7},
+    {"name": "Satore sir", "subject": "C++", "experience": 9}    
 ]
 
 attendance = [
@@ -38,7 +39,6 @@ attendance = [
     {"name": "Shivani", "status": "Present"},
     {"name": "Pooja", "status": "Present"}
 ]
-
 fees = [
     {"name": "Anuradha", "total_fees": 4000, "paid_fees": 3000, "pending_fees": 1000},
     {"name": "Kranti", "total_fees": 4000, "paid_fees": 1500, "pending_fees": 2500},
@@ -48,7 +48,6 @@ fees = [
     {"name": "Shivani", "total_fees": 4000, "paid_fees": 3500, "pending_fees": 500},
     {"name": "Pooja", "total_fees": 4000, "paid_fees": 4000, "pending_fees": 0}
 ]
-
 @app.route("/")
 def home():
     return render_template("home.html", institute=institute)
@@ -67,7 +66,8 @@ def attendance_page():
 
 @app.route("/fees")
 def fees_page():
-    return render_template("fees.html", fees=fees)
+    return render_template("fees.html", fees=fees) 
+
 
 if __name__ == "__main__":
     app.run(debug=True)

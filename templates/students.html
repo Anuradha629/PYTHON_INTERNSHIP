@@ -2,25 +2,84 @@
 
 {% block content %}
 
-<h2>Students</h2>
-<p>This page provides information about students, their subjects and class schedules.<br>
-It helps in maintaining accurate student records and effective class management.</p>
+<div class="container mt-4">
 
-<table border="1">
-<tr>
-    <th>Name</th>
-    <th>Subject</th>
-    <th>Time</th>   
-</tr>
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold">🎓 Coaching Class Manager</h1>
 
-{% for s in students %}
-<tr>
-    <td>{{ s.name }}</td>
-    <td>{{ s.subject }}</td>
-    <td>{{ s.time }}</td>
-</tr>
-{% endfor %}
+        <p class="lead text-muted">
+            A simple management system for maintaining student records,
+            course details and batch schedules.
+        </p>
+    </div>
 
-</table>
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h2 class="text-primary">{{ students|length }}</h2>
+                    <h5>Registered Students</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h2 class="text-success">6</h2>
+                    <h5>Courses Offered</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h2 class="text-danger">4</h2>
+                    <h5>Active Batches</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <h2 class="fw-bold">Student Information</h2>
+
+    <p class="text-muted">
+        This section contains student details, enrolled courses,
+        batch schedules and academic information. It helps in
+        maintaining accurate records and effective class management.
+    </p>
+
+    <table class="table table-striped table-hover table-bordered">
+
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Subject</th>
+                <th>Class Timing</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.name }}</td>
+                <td>
+                    <span class="badge bg-success">
+                        {{ s.subject }}
+                    </span>
+                </td>
+                <td>{{ s.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
 
 {% endblock %}
