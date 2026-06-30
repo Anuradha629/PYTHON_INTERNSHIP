@@ -10,15 +10,6 @@ percentage=Total/5
 print("Total marks =",Total)
 print(" Percentage =",percentage)
 
-if percentage >= 75:
-    print("Congratulations...you got Distinction")
-
-elif  percentage >= 60:
-    print("Congratulations...you got First class")
-
-elif percentage >= 45:
-     print("Congratulations...you passed")
-
-else:
-      print("You failed")
+if percentage >=75:
+    print(Congratulations)
 

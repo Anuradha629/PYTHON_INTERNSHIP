@@ -1,26 +1,77 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
 {% block content %}
 
 <h2>Attendance</h2>
 
-<p>
-    This page maintains student attendance records to ensure regular participation in classes.
-</p>
+<!-- ADD ATTENDANCE FORM -->
+<form method="POST" class="card p-3">
 
-<table border="1">
+    <label>Student Name</label>
+    <input 
+        type="text"
+        name="student_name"
+        class="form-control mb-2"
+        placeholder="Enter Student Name"
+        required
+    >
+
+    <label>Date</label>
+    <input 
+        type="date"
+        name="date"
+        class="form-control mb-2"
+        required
+    >
+
+    <label>Status</label>
+    <select name="status" class="form-control mb-2">
+        <option>Present</option>
+        <option>Absent</option>
+    </select>
+
+    <button class="btn btn-success">
+        Mark Attendance
+    </button>
+
+</form>
+
+<hr>
+
+
+<!-- 📝 ATTENDANCE TABLE -->
+<table class="table table-striped">
 
     <tr>
-        <th>Name</th>
+        <th>ID</th>
+        <th>Student</th>
+        <th>Date</th>
         <th>Status</th>
+        <th>Action</th>
     </tr>
 
-    {% for a in attendance %}
-    <tr>
-        <td>{{ a.name }}</td>
-        <td>{{ a.status }}</td>
-    </tr>
-    {% endfor %}
+    {% for r in records %}
+<tr>
+    <td>{{ r.id }}</td>
+    <td>{{ r.student_name }}</td>
+    <td>{{ r.date }}</td>
+    <td>{{ r.status }}</td>
+
+    <!-- ADD ACTION COLUMN -->
+    <td>
+        <a href="/edit_attendance/{{ r.id }}" class="btn btn-warning btn-sm">
+            Edit
+        </a>
+
+        <a href="/delete_attendance/{{ r.id }}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure You want to delete {{r.student_name}}?')">
+            Delete
+        </a>
+    </td>
+
+</tr>
+{% endfor %}
 
 </table>
 

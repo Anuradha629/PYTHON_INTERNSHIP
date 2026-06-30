@@ -64,4 +64,5 @@ def get_status():
             print("Fees Pending:", s["total_fees"] - s["fees_paid"])
             print("Attendance:", s["attendance"], "%")
             print("---------------------------------")
+
 get_status()

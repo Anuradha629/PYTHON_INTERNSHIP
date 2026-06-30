@@ -1,0 +1,21 @@
+body{
+
+background:#f4f6f9;
+
+}
+
+
+.card{
+
+border-radius:15px;
+
+box-shadow:0 5px 15px #aaa;
+
+}
+
+
+h1,h2{
+
+font-weight:bold;
+
+}
