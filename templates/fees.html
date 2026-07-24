@@ -1,103 +1,232 @@
 
-{% extends "layout.html" %}
+
+{% extends "base.html" %}
+
+
 {% block content %}
 
-<h2 class="mb-3">💰 Fees Dashboard</h2>
 
-<!-- TOP CARDS -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="fw-bold">
+        <i class="bi bi-cash-coin"></i>
+        Fees Management
+    </h2>
+
+    {% if session.get("username") %}
+    <a href="/collect_fee" class="btn btn-success">
+
+        <i class="bi bi-plus-circle"></i>
+        Collect Fee
+
+    </a>
+    {% endif %}
+
+</div>
+
+
+
+
+
+<!-- SUMMARY CARDS -->
+
 <div class="row mb-4">
 
-    <div class="col-md-4">
-        <div class="card shadow p-3 text-center">
-            <h6>Total Fees (Per Student)</h6>
-            <h3 class="text-primary">{{ total }}</h3>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow p-3 text-center bg-success text-white">
-            <h6>Total Paid</h6>
-            <h3>{{ paid.values() | sum }}</h3>
-        </div>
-    </div>
+<div class="col-md-4">
 
-    <div class="col-md-4">
-        <div class="card shadow p-3 text-center bg-danger text-white">
-            <h6>Total Pending</h6>
-            <h3>{{ (total * fees|length) - (paid.values() | sum) }}</h3>
-        </div>
-    </div>
+<div class="card shadow border-0 text-center p-3">
+
+<h6>Total Collection</h6>
+
+<h3 class="text-success">
+
+₹ {{ total_collection }}
+
+</h3>
+
+</div>
 
 </div>
 
 
-<!-- ➕ ADD FEES FORM -->
-<div class="card shadow p-3 mb-4">
-    <h5>➕ Add Fee</h5>
 
-    <form method="POST" action="/add_fee">
 
-        <input name="student_name" class="form-control mb-2" placeholder="Student Name" required>
 
-        <input name="amount" type="number" class="form-control mb-2" placeholder="Paid Amount" required>
+<div class="col-md-4">
 
-        <select name="status" class="form-control mb-3">
-            <option value="Paid">Paid</option>
-            <option value="Pending">Pending</option>
-        </select>
+<div class="card shadow border-0 text-center p-3">
 
-        <button type="submit" class="btn btn-success w-100">Add Fee</button>
+<h6>Total Students</h6>
 
-    </form>
+<h3 class="text-primary">
+
+{{ total_students }}
+
+</h3>
+
+</div>
+
 </div>
 
 
-<!-- 📋 TABLE -->
+
+
+
+<div class="col-md-4">
+
+<div class="card shadow border-0 text-center p-3">
+
+<h6>Pending Fees</h6>
+
+<h3 class="text-danger">
+
+{{ pending_fee }}
+
+</h3>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- FEE TABLE -->
+
+
 <div class="card shadow p-3">
+
 
 <table class="table table-hover table-striped">
 
-    <tr>
-        <th>ID</th>
-        <th>Student</th>
-        <th>Total</th>
-        <th>Paid</th>
-        <th>Pending</th>
-        <th>Action</th>
-    </tr>
 
-    {% for f in fees %}
-    <tr>
-        <td>{{ f.id }}</td>
-        <td><b>{{ f.student_name }}</b></td>
+<thead>
 
-        <td>{{ total }}</td>
+<tr>
 
-        <td>
-            <span class="badge bg-success">
-                {{ paid.get(f.student_name, 0) }}
-            </span>
-        </td>
+<th>ID</th>
 
-        <td>
-            <span class="badge bg-danger">
-                {{ total - paid.get(f.student_name, 0) }}
-            </span>
-        </td>
+<th>Roll No</th>
 
-        <td>
-            <a href="/delete_fee/{{ f.id }}"
-               class="btn btn-danger btn-sm"
-               onclick="return confirm('Delete {{ f.student_name }} fee?')">
-                Delete
-            </a>
-        </td>
+<th>Student Name</th>
 
-    </tr>
-    {% endfor %}
+<th>Total Fee</th>
+
+<th>Paid Fee</th>
+
+<th>Pending</th>
+
+<th>Date</th>
+<th>Actions</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+{% for f in fees %}
+
+
+<tr>
+
+
+<td>
+{{ f.id }}
+</td>
+
+
+
+<td>
+{{ f.roll_no }}
+</td>
+
+
+
+<td>
+{{ f.name }}
+</td>
+
+
+
+<td>
+₹ {{ f.total_fee }}
+</td>
+
+
+
+<td>
+
+<span class="badge bg-success">
+
+₹ {{ f.paid_fee }}
+
+</span>
+
+</td>
+
+
+
+
+<td>
+
+<span class="badge bg-danger">
+
+₹ {{ f.total_fee - f.paid_fee }}
+
+</span>
+
+</td>
+
+
+<td>
+
+    {{ f.date }}
+
+</td>
+
+<td>
+
+    <a href="/fee_receipt/{{ f.id }}"
+       class="btn btn-primary btn-sm">
+
+        <i class="bi bi-receipt"></i>
+
+        Receipt
+
+    </a>
+
+</td>
+
+</tr>
+
+
+
+
+{% endfor %}
+
+
+</tbody>
+
 
 </table>
 
+
 </div>
+
+
 
 {% endblock %}
