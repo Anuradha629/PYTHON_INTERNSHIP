@@ -1,14 +1,163 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
+
 {% block content %}
 
-<h2>Student Profile</h2>
 
-<div class="card p-3">
+<div class="container-fluid">
 
-<p><b>Name:</b> {{ s.name }}</p>
-<p><b>Course:</b> {{ s.course }}</p>
-<p><b>Status:</b> {{ s.status }}</p>
+
+<div class="card shadow-lg border-0">
+
+
+<div class="card-header bg-primary text-white">
+
+<h3>
+<i class="bi bi-person-vcard-fill"></i>
+
+Student Profile
+
+</h3>
 
 </div>
+
+
+
+
+<div class="card-body">
+
+
+<div class="row">
+
+
+
+<div class="col-md-6">
+
+
+<p>
+<strong>Roll Number:</strong>
+{{ s.roll_no }}
+</p>
+
+
+<p>
+<strong>Student Name:</strong>
+{{ s.name }}
+</p>
+
+
+<p>
+<strong>Father Name:</strong>
+{{ s.father_name }}
+</p>
+
+
+<p>
+<strong>Mobile:</strong>
+{{ s.mobile }}
+</p>
+
+
+
+<p>
+<strong>Course:</strong>
+{{ s.course }}
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="col-md-6">
+
+
+<p>
+<strong>Batch:</strong>
+{{ s.batch }}
+</p>
+
+
+
+<p>
+<strong>Address:</strong>
+{{ s.address }}
+</p>
+
+
+
+<p>
+<strong>Admission Date:</strong>
+{{ s.admission_date }}
+</p>
+
+
+
+<p>
+<strong>Status:</strong>
+
+
+{% if s.status=="Active" %}
+
+<span class="badge bg-success">
+Active
+</span>
+
+
+{% else %}
+
+<span class="badge bg-danger">
+Inactive
+</span>
+
+{% endif %}
+
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<hr>
+
+
+
+<a href="/students" class="btn btn-secondary">
+
+<i class="bi bi-arrow-left"></i>
+
+Back To Students
+
+</a>
+
+
+<a href="/edit_student/{{s.id}}" 
+class="btn btn-warning">
+
+<i class="bi bi-pencil"></i>
+
+Edit
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 {% endblock %}
