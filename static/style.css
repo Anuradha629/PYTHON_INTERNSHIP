@@ -1,21 +1,352 @@
-body{
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-background:#f4f6f9;
+
+body{
+    background:#f4f7fb;
+    font-family:'Segoe UI',sans-serif;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    background:linear-gradient(90deg,#0f172a,#2563eb);
+    min-height:70px;
+    height:70px;
+    padding:0 15px !important;
+}
+
+
+.navbar-brand{
+    font-weight:bold;
+    font-size:20px;
+    padding:0;
+}
+
+
+.navbar .nav-link{
+    color:white !important;
+    margin:0 6px;
+    padding:0 8px !important;
+    line-height:70px;
+    font-size:15px;
+    font-weight:500;
+    transition:.3s;
+}
+
+
+.navbar .nav-link:hover{
+    color:#ffd54f !important;
+}
+
+
+.navbar .form-control{
+     width:150px;
+     border-radius:20px;
+    
+}
+
+
+.navbar .btn{
+    border-radius:20px;
+    padding:6px 12px;
+}
+
+
+
+/* ================= MAIN CONTENT ================= */
+
+
+body.container{
+    padding-top:20px;
+}
+
+
+.container-fluid{
+    padding-left:25px;
+    padding-right:25px;
+}
+
+
+
+
+
+/* ================= HEADER ================= */
+
+
+.top-header{
+
+    height:75px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:15px 25px;
+
+    border-radius:0 0 15px 15px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
 
 }
+
+
+
+/* ================= SEARCH ================= */
+
+
+.search-box form{
+    display:flex;
+}
+
+
+.search-box input{
+
+    width:280px;
+    padding:10px 15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px 0 0 10px;
+
+    outline:none;
+
+}
+
+
+.search-box button{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:0 18px;
+
+    border-radius:0 10px 10px 0;
+
+}
+
+
+
+
+/* ================= PROFILE ================= */
+
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+
+.profile{
+
+    font-weight:600;
+
+    color:#0f172a;
+
+}
+
+
+
+
+
+/* ================= CARDS ================= */
 
 
 .card{
 
-border-radius:15px;
+    border:none;
 
-box-shadow:0 5px 15px #aaa;
+    border-radius:18px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.08);
+
+    transition:.3s;
+
+}
+
+
+
+.card:hover{
+
+    transform:translateY(-5px);
 
 }
 
 
-h1,h2{
 
-font-weight:bold;
+
+
+/* ================= BUTTON ================= */
+
+
+.btn{
+
+    border-radius:10px;
 
 }
+
+
+
+
+
+/* ================= TABLE ================= */
+
+
+.table{
+
+    background:white;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+
+.table th{
+
+    background:#0f172a;
+
+    color:white;
+
+}
+
+
+
+
+/* ================= DARK MODE ================= */
+
+
+.dark-mode{
+
+    background:#111827;
+
+    color:white;
+
+}
+
+
+
+.dark-mode .card{
+
+    background:#1f2937;
+
+    color:white;
+
+}
+
+
+.dark-mode .table{
+
+    background:#1f2937;
+
+    color:white;
+
+}
+
+
+.dark-mode .profile{
+
+    color:white;
+
+}
+
+
+
+
+/* ================= MOBILE ================= */
+
+
+@media(max-width:992px){
+
+
+.navbar .nav-link{
+
+    line-height:normal;
+
+    padding:10px !important;
+
+}
+
+
+.search-box input{
+
+    width:150px;
+
+}
+
+}
+
+
+
+@media(max-width:576px){
+
+
+.top-header{
+
+    flex-direction:column;
+
+    height:auto;
+
+    gap:15px;
+
+}
+
+
+.search-box input{
+
+    width:200px;
+
+}
+
+}
+
+
+
+
+/* ================= QUICK ACTION BUTTON ================= */
+
+
+.action-btn{
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:500;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    transition:.3s;
+
+}
+
+
+
+.action-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 5px 10px rgba(0,0,0,0.2);
+
+}
+
