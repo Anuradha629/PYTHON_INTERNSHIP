@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="fw-bold">
+        <i class="bi bi-wallet2"></i>
+        Collect Student Fee
+    </h2>
+
+
+    <a href="/fees" class="btn btn-secondary">
+        Back
+    </a>
+
+</div>
+
+
+
+
+
+<div class="card shadow p-4">
+
+
+<form method="POST">
+
+
+
+<label class="fw-bold">
+Student Name
+</label>
+
+
+<select name="student_id" 
+class="form-control mb-3"
+required>
+
+
+<option value="">
+Select Student
+</option>
+
+
+{% for s in students %}
+
+
+<option value="{{ s.id }}">
+
+{{ s.roll_no }} - {{ s.name }}
+
+</option>
+
+
+{% endfor %}
+
+
+</select>
+
+
+
+
+
+<label class="fw-bold">
+Total Fee
+</label>
+
+
+<input 
+type="number"
+name="total_fee"
+class="form-control mb-3"
+placeholder="Enter Total Course Fee"
+required
+>
+
+
+
+
+
+<label class="fw-bold">
+Paid Amount
+</label>
+
+
+<input 
+type="number"
+name="paid_fee"
+class="form-control mb-3"
+placeholder="Enter Paid Amount"
+required
+>
+
+
+
+
+
+<label class="fw-bold">
+Payment Date
+</label>
+
+
+<input 
+type="date"
+name="date"
+class="form-control mb-3"
+required
+>
+
+
+
+
+<button class="btn btn-success w-100">
+
+<i class="bi bi-check-circle"></i>
+
+Save Fee
+
+</button>
+
+
+</form>
+
+
+</div>
+
+
+{% endblock %}
