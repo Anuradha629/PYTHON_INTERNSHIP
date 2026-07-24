@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-success text-white">
+
+            <h3>
+                <i class="bi bi-receipt"></i>
+                Fee Receipt
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="text-center mb-4">
+
+                <h4 class="fw-bold">
+                    Bright Future Coaching Classes
+                </h4>
+
+                <p class="text-muted">
+                    Student Fee Payment Receipt
+                </p>
+
+            </div>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Receipt ID</th>
+                    <td>{{ receipt.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Roll Number</th>
+                    <td>{{ receipt.roll_no }}</td>
+                </tr>
+
+                <tr>
+                    <th>Student Name</th>
+                    <td>{{ receipt.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Course</th>
+                    <td>{{ receipt.course }}</td>
+                </tr>
+
+                <tr>
+                    <th>Total Fee</th>
+                    <td>₹ {{ receipt.total_fee }}</td>
+                </tr>
+
+                <tr>
+                    <th>Paid Fee</th>
+                    <td>₹ {{ receipt.paid_fee }}</td>
+                </tr>
+
+                <tr>
+                    <th>Pending Fee</th>
+                    <td>₹ {{ receipt.pending_fee }}</td>
+                </tr>
+
+                <tr>
+                    <th>Payment Date</th>
+                    <td>{{ receipt.date }}</td>
+                </tr>
+
+            </table>
+
+            <div class="mt-4 text-center">
+
+                <button
+                    onclick="window.print()"
+                    class="btn btn-success">
+
+                    <i class="bi bi-printer"></i>
+
+                    Print Receipt
+
+                </button>
+
+                <a href="/fees"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
