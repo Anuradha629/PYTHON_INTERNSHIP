@@ -1,20 +1,299 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
+
 {% block content %}
 
-<h2>Edit Student</h2>
 
-<form method="POST" class="card p-3">
+<div class="container-fluid">
 
-<input name="name" value="{{ s.name }}" class="form-control mb-2">
-<input name="course" value="{{ s.course }}" class="form-control mb-2">
 
-<select name="status" class="form-control mb-2">
-<option {% if s.status=="Active" %}selected{% endif %}>Active</option>
-<option {% if s.status=="Inactive" %}selected{% endif %}>Inactive</option>
+<div class="card shadow-lg border-0">
+
+
+<div class="card-header bg-warning">
+
+<h3>
+<i class="bi bi-pencil-square"></i>
+
+Edit Student Information
+
+</h3>
+
+</div>
+
+
+
+
+<div class="card-body">
+
+
+<form method="POST">
+
+
+<div class="row">
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Roll Number
+</label>
+
+<input 
+type="text"
+name="roll_no"
+class="form-control"
+value="{{s.roll_no}}"
+required>
+
+</div>
+
+
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Student Name
+</label>
+
+<input 
+type="text"
+name="name"
+class="form-control"
+value="{{s.name}}"
+required>
+
+</div>
+
+
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Father Name
+</label>
+
+<input 
+type="text"
+name="father_name"
+class="form-control"
+value="{{s.father_name}}"
+required>
+
+</div>
+
+<div class="col-md-4 mb-3">
+    <label class="form-label">
+        Surname
+    </label>
+
+    <input 
+    type="text"
+    name="surname"
+    class="form-control"
+    value="{{s.surname}}"
+    required>
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="row">
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Mobile Number
+</label>
+
+<input 
+type="text"
+name="mobile"
+class="form-control"
+value="{{s.mobile}}"
+required>
+
+</div>
+
+
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Course
+</label>
+
+<input 
+type="text"
+name="course"
+class="form-control"
+value="{{s.course}}"
+required>
+
+</div>
+
+
+
+
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Batch
+</label>
+
+
+<select name="batch" class="form-select">
+
+
+<option {% if s.batch=="Morning" %}selected{% endif %}>
+Morning
+</option>
+
+
+<option {% if s.batch=="Afternoon" %}selected{% endif %}>
+Afternoon
+</option>
+
+
+<option {% if s.batch=="Evening" %}selected{% endif %}>
+Evening
+</option>
+
+
 </select>
 
-<button class="btn btn-primary">Update</button>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="row">
+
+
+<div class="col-md-6 mb-3">
+
+
+<label class="form-label">
+Address
+</label>
+
+
+<textarea 
+name="address"
+class="form-control"
+rows="3">{{s.address}}</textarea>
+
+
+</div>
+
+
+
+
+
+<div class="col-md-3 mb-3">
+
+
+<label class="form-label">
+Admission Date
+</label>
+
+
+<input
+type="date"
+name="admission_date"
+class="form-control"
+value="{{s.admission_date}}">
+
+
+</div>
+
+
+
+
+
+<div class="col-md-3 mb-3">
+
+
+<label class="form-label">
+Status
+</label>
+
+
+<select name="status" class="form-select">
+
+
+<option value="Active"
+{% if s.status=="Active" %}selected{% endif %}>
+
+Active
+
+</option>
+
+
+
+<option value="Inactive"
+{% if s.status=="Inactive" %}selected{% endif %}>
+
+Inactive
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<button class="btn btn-success">
+
+<i class="bi bi-check-circle"></i>
+
+Update Student
+
+</button>
+
+
+
+<a href="/students" class="btn btn-secondary">
+
+Cancel
+
+</a>
+
+
+
 
 </form>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 {% endblock %}
