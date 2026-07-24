@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+
+    <div class="card shadow-lg border-0">
+
+
+        <div class="card-header bg-warning">
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Teacher Information
+
+            </h3>
+
+        </div>
+
+
+
+
+        <div class="card-body">
+
+
+            <form method="POST">
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Teacher Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            value="{{t.name}}"
+                            required>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Subject
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="subject"
+                            class="form-control"
+                            value="{{t.subject}}"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Mobile Number
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            class="form-control"
+                            value="{{t.mobile}}"
+                            required>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Teaching Timing
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="timing"
+                            class="form-control"
+                            value="{{t.timing}}"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Experience
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="experience"
+                            class="form-control"
+                            value="{{t.experience}}"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <hr>
+
+
+
+
+                <button class="btn btn-success">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Update Teacher
+
+                </button>
+
+
+
+
+                <a href="/teachers" class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
