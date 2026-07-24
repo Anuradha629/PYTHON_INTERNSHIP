@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+
+    <div class="card shadow-lg border-0">
+
+
+        <div class="card-header bg-success text-white">
+
+            <h3>
+                <i class="bi bi-person-plus-fill"></i>
+                Add New Teacher
+            </h3>
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            <form method="POST" action="/add_teacher">
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Teacher Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Enter Teacher Name"
+                            required>
+
+
+                    </div>
+
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Subject
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="subject"
+                            class="form-control"
+                            placeholder="Enter Subject"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Mobile Number
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            class="form-control"
+                            placeholder="Enter Mobile Number"
+                            maxlength="10"
+                            required>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Teaching Timing
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="timing"
+                            class="form-control"
+                            placeholder="Example: 10 AM - 12 PM"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+
+                            Experience
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="experience"
+                            class="form-control"
+                            placeholder="Example: 5 Years"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <hr>
+
+
+
+                <button type="submit" class="btn btn-success">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    Save Teacher
+
+                </button>
+
+
+
+
+                <a href="/teachers" class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
