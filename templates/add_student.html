@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+            <h3>
+                <i class="bi bi-person-plus-fill"></i>
+                New Student Admission
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" action="/add_student">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Roll Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="roll_no"
+                            class="form-control"
+                            placeholder="Enter Roll Number"
+                            required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Student Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Enter Student Name"
+                            required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Father's Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="father_name"
+                            class="form-control"
+                            placeholder="Enter Father's Name"
+                            required>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Surname
+                    </label>
+
+                    <input
+                        type="text"
+                        name="surname"
+                        class="form-control"
+                        placeholder="Enter Surname"
+                        required>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            class="form-control"
+                            placeholder="Enter Mobile Number"
+                            required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Course
+                        </label>
+
+                        <input
+                            type="text"
+                            name="course"
+                            class="form-control"
+                            placeholder="Python / Java / C"
+                            required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Batch
+                        </label>
+
+                        <select
+                            name="batch"
+                            class="form-select">
+
+                            <option>Morning</option>
+                            <option>Afternoon</option>
+                            <option>Evening</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea
+                            name="address"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Enter Address"></textarea>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">
+                            Admission Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="admission_date"
+                            class="form-control"
+                            required>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select
+                            name="status"
+                            class="form-select">
+
+                            <option>Active</option>
+                            <option>Inactive</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button
+                    class="btn btn-success">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    Save Student
+
+                </button>
+
+                <a href="/students"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
