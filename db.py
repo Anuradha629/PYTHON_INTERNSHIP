@@ -24,37 +24,10 @@ def init_db():
     cursor = conn.cursor()
 
 
-    # Users Table
+    # ================= STUDENTS TABLE =================
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users(
-
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        password TEXT
-
-    )
-    """)
-
-    cursor.execute("""
-    SELECT * FROM users
-    WHERE username='Anuradha'
-    """)
-
-    user = cursor.fetchone()
-
-    if not user:
-        cursor.execute("""
-        INSERT INTO users(username,password)
-        VALUES(?,?)
-        """,
-        ("Anuradha","anuradha123"))
-
-
-        # Students Table
-
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS students(
+    CREATE TABLE IF NOT EXISTS students(
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         roll_no TEXT UNIQUE,
@@ -73,7 +46,7 @@ def init_db():
 
 
 
-    # Teachers Table
+    # ================= TEACHERS TABLE =================
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS teachers(
@@ -90,7 +63,7 @@ def init_db():
 
 
 
-    # Fees Table
+    # ================= FEES TABLE =================
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS fees(
@@ -105,7 +78,8 @@ def init_db():
     """)
 
 
-    # Attendance Table
+
+    # ================= ATTENDANCE TABLE =================
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS attendance(
@@ -119,5 +93,7 @@ def init_db():
     """)
 
 
+
     conn.commit()
+
     conn.close()

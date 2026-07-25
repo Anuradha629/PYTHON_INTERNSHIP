@@ -1014,14 +1014,11 @@ def reports():
     FROM attendance
     """).fetchone()[0]
 
-
-
     present = conn.execute("""
     SELECT COUNT(*)
     FROM attendance
     WHERE status='Present'
     """).fetchone()[0]
-
 
 
     absent = conn.execute("""
@@ -1031,83 +1028,44 @@ def reports():
     """).fetchone()[0]
 
 
-
-
     if total_attendance > 0:
-
-
         attendance_percentage = round(
             (present / total_attendance) * 100,
             2
         )
-
 
     else:
 
         attendance_percentage = 0
 
 
-
-
-
     # Course Wise Report
-
-
     courses = conn.execute("""
     SELECT
-
     course,
-
     COUNT(*) as count
-
-
     FROM students
-
-
     GROUP BY course
 
     """).fetchall()
-
-
-
     conn.close()
-
-
 
     return render_template(
         "reports.html",
 
         total_students=total_students,
-
         total_fee=total_fee,
-
         paid_fee=paid_fee,
-
         pending_fee=pending_fee,
-
         total_attendance=total_attendance,
-
         present=present,
-
         absent=absent,
-
         attendance_percentage=attendance_percentage,
-
         courses=courses
     )
 
-
-
-
-
-
 # ================= START APPLICATION =================
-
-
 init_db()
-
-
-
 if __name__=="__main__":
 
     app.run(debug=True)
