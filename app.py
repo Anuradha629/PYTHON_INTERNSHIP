@@ -754,7 +754,6 @@ def fee_receipt(id):
         "fee_receipt.html",
         receipt=receipt
     )
-# ================= ATTENDANCE MODULE =================
 
 
 # -------- ATTENDANCE LIST + ADD --------

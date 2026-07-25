@@ -8,12 +8,11 @@
         Student Management
     </h2>
 
-    {% if session.get("username") %}
+
     <a href="/add_student" class="btn btn-primary">
     <i class="bi bi-person-plus-fill"></i>
     Add Student
     </a>
-    {% endif %}  
 </div>
 
 
@@ -48,9 +47,8 @@
 <th>Course</th>
 <th>Batch</th>
 <th>Status</th>
-{%if session.get("username")%}
 <th>Actions</th>
-{% endif %}
+
 
 </tr>
 
@@ -97,7 +95,6 @@ Inactive
 
 
 
-{% if session.get("username") %}
 
 <td>
 
@@ -121,8 +118,6 @@ Inactive
 
 </td>
 
-
-{% endif %}
 
 </tr>
 

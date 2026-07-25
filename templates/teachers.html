@@ -13,13 +13,13 @@
     </h2>
 
 
-    {% if session.get("username") %}
+    
     <a href="/add_teacher" class="btn btn-primary">
 
         <i class="bi bi-person-plus-fill"></i>
         Add Teacher
     </a>
-    {% endif %}
+   
 
     </a>
 
@@ -50,9 +50,8 @@
 
 <th>Experience</th>
 
-{% if session.get("username") %}
 <th>Actions</th>
-{% endif %}
+
 
 </tr>
 
@@ -99,7 +98,7 @@
 </td>
 
 
-{% if session.get("username") %}
+
 <td>
 
 <a href="/edit_teacher/{{t.id}}" class="btn btn-warning btn-sm">
@@ -112,7 +111,7 @@
 </a>
 
 </td>
-{% endif %}
+
 
 
 
