@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-primary mb-4">
+            📊 Add Student Performance
+        </h2>
+
+
+        <form method="POST">
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Select Student
+                </label>
+
+
+                <select name="student_id" class="form-control">
+
+                    {% for s in students %}
+
+                    <option value="{{s.id}}">
+                        {{s.name}} - {{s.course}}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Marks
+                </label>
+
+                <input 
+                type="number"
+                name="marks"
+                class="form-control"
+                placeholder="Enter Marks">
+
+            </div>
+
+
+
+            <button class="btn btn-primary">
+
+                💾 Save Performance
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
