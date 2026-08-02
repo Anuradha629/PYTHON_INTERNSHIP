@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container my-4" style="max-width: 900px;">
 
     <div class="card shadow-lg border-0">
 
@@ -15,11 +15,14 @@
 
         <div class="card-body">
 
-            <form method="POST" action="/add_student">
+            <form method="POST"
+                  action="/add_student"
+                  enctype="multipart/form-data">
 
                 <div class="row">
 
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Roll Number
                         </label>
@@ -30,9 +33,12 @@
                             class="form-control"
                             placeholder="Enter Roll Number"
                             required>
+
                     </div>
 
+
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Student Name
                         </label>
@@ -43,9 +49,12 @@
                             class="form-control"
                             placeholder="Enter Student Name"
                             required>
+
                     </div>
 
+
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Father's Name
                         </label>
@@ -56,9 +65,12 @@
                             class="form-control"
                             placeholder="Enter Father's Name"
                             required>
+
                     </div>
 
                 </div>
+
+
                 <div class="col-md-6 mb-3">
 
                     <label class="form-label">
@@ -74,9 +86,11 @@
 
                 </div>
 
+
                 <div class="row">
 
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Mobile Number
                         </label>
@@ -88,9 +102,12 @@
                             placeholder="Enter Mobile Number"
                             maxlength="10"
                             required>
+
                     </div>
 
+
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Course
                         </label>
@@ -101,9 +118,12 @@
                             class="form-control"
                             placeholder="Python / Java / C"
                             required>
+
                     </div>
 
+
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label">
                             Batch
                         </label>
@@ -117,13 +137,16 @@
                             <option>Evening</option>
 
                         </select>
+
                     </div>
 
                 </div>
 
+
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
+
                         <label class="form-label">
                             Address
                         </label>
@@ -133,9 +156,12 @@
                             class="form-control"
                             rows="3"
                             placeholder="Enter Address"></textarea>
+
                     </div>
 
+
                     <div class="col-md-3 mb-3">
+
                         <label class="form-label">
                             Admission Date
                         </label>
@@ -145,9 +171,12 @@
                             name="admission_date"
                             class="form-control"
                             required>
+
                     </div>
 
+
                     <div class="col-md-3 mb-3">
+
                         <label class="form-label">
                             Status
                         </label>
@@ -160,23 +189,54 @@
                             <option>Inactive</option>
 
                         </select>
+
                     </div>
 
                 </div>
 
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+
+                            <i class="bi bi-camera-fill"></i>
+                            Student Photo
+
+                        </label>
+
+                        <input
+                            type="file"
+                            name="photo"
+                            class="form-control"
+                            accept=".jpg,.jpeg,.png">
+
+                        <small class="text-muted">
+                            Allowed formats: JPG, JPEG, PNG
+                        </small>
+
+                    </div>
+
+                </div>
+
+
                 <hr>
 
+
                 <button
+                    type="submit"
                     class="btn btn-success">
 
                     <i class="bi bi-check-circle-fill"></i>
-
                     Save Student
 
                 </button>
 
-                <a href="/students"
-                   class="btn btn-secondary">
+
+                <a
+                    href="/students"
+                    class="btn btn-secondary">
 
                     Cancel
 
