@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5 col-md-7">
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- Header -->
+                <div class="bg-primary text-white text-center py-4">
+
+                    <i class="bi bi-person-plus-fill display-4"></i>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        Create Account
+                    </h2>
+
+                    <p class="mb-0">
+                        Join Bright Future Coaching
+                    </p>
+
+                </div>
+
+                <!-- Body -->
+                <div class="card-body p-4">
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-person-fill text-primary"></i>
+                                Username
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-primary text-white">
+                                    <i class="bi bi-person"></i>
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="username"
+                                    class="form-control form-control-lg"
+                                    placeholder="Enter Username"
+                                    required>
+
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-envelope-fill text-danger"></i>
+                                Email
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-danger text-white">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control form-control-lg"
+                                    placeholder="Enter Email Address"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+    
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-lock-fill text-success"></i>
+                                Password
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-success text-white">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+
+                                <input
+                                    type="password"
+                                    name="password"
+                                    class="form-control form-control-lg"
+                                    placeholder="Enter Password"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success btn-lg w-100 fw-bold">
+
+                            <i class="bi bi-person-check-fill"></i>
+                            Register
+
+                        </button>
+
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0 text-muted">
+
+                        Already have an account?
+
+                        <a href="/login"
+                           class="text-decoration-none fw-bold text-primary">
+
+                            Login Here
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center">
+
+                    <small class="text-muted">
+
+                        <i class="bi bi-shield-check text-success"></i>
+                        Secure Registration
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
