@@ -11,6 +11,9 @@ def get_connection():
 
     conn.row_factory = sqlite3.Row
 
+    # Enable Foreign Key support in SQLite
+    conn.execute("PRAGMA foreign_keys = ON")
+
     return conn
 
 
@@ -24,13 +27,14 @@ def init_db():
     cursor = conn.cursor()
 
 
+
     # ================= STUDENTS TABLE =================
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS students(
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        roll_no TEXT UNIQUE,
+        roll_no INTEGER UNIQUE,
         name TEXT,
         father_name TEXT,
         surname TEXT,
@@ -43,6 +47,14 @@ def init_db():
 
     )
     """)
+
+        
+    try:
+       cursor.execute("ALTER TABLE students ADD COLUMN photo TEXT DEFAULT 'default.png'")
+    except Exception:
+        # Column already exists
+        pass
+
 
 
 
@@ -69,10 +81,15 @@ def init_db():
     CREATE TABLE IF NOT EXISTS fees(
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id INTEGER,
-        total_fee INTEGER,
-        paid_fee INTEGER,
-        date TEXT
+        receipt_no TEXT UNIQUE,
+        student_id INTEGER NOT NULL,
+        total_fee INTEGER NOT NULL,
+        paid_fee INTEGER NOT NULL,
+        date TEXT NOT NULL,
+
+        FOREIGN KEY(student_id)
+        REFERENCES students(id)
+        ON DELETE CASCADE
 
     )
     """)
@@ -85,9 +102,48 @@ def init_db():
     CREATE TABLE IF NOT EXISTS attendance(
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id INTEGER,
+        student_id INTEGER NOT NULL,
         date TEXT,
-        status TEXT
+        status TEXT,
+
+        FOREIGN KEY(student_id)
+        REFERENCES students(id)
+        ON DELETE CASCADE
+
+    )
+    """)
+
+
+
+    # ================= USERS TABLE =================
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT,
+        email TEXT,
+        role TEXT DEFAULT 'student'
+
+    )
+    """)
+
+
+
+    # ================= PERFORMANCE TABLE =================
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS performance(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER,
+        marks INTEGER,
+        remark TEXT,
+
+        FOREIGN KEY(student_id)
+        REFERENCES students(id)
+        ON DELETE CASCADE
 
     )
     """)
