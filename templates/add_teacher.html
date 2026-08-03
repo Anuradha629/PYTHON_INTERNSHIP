@@ -1,44 +1,31 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 
-
-<div class="container-fluid">
-
+<div class="container" style="max-width: 750px;">
 
     <div class="card shadow-lg border-0">
 
-
         <div class="card-header bg-success text-white">
 
-            <h3>
+            <h3 class="mb-0">
                 <i class="bi bi-person-plus-fill"></i>
                 Add New Teacher
             </h3>
 
         </div>
 
-
-
-        <div class="card-body">
-
+        <div class="card-body" style="min-height: 430px; padding: 30px;">
 
             <form method="POST" action="/add_teacher">
 
-
+                <!-- Teacher Name -->
                 <div class="row">
-
-
-                    <div class="col-md-6 mb-3">
-
+                    <div class="col-md-12 mb-4">
 
                         <label class="form-label">
-
                             Teacher Name
-
                         </label>
-
 
                         <input
                             type="text"
@@ -47,21 +34,17 @@
                             placeholder="Enter Teacher Name"
                             required>
 
-
                     </div>
+                </div>
 
 
-
-
-                    <div class="col-md-6 mb-3">
-
+                <!-- Subject -->
+                <div class="row">
+                    <div class="col-md-12 mb-4">
 
                         <label class="form-label">
-
                             Subject
-
                         </label>
-
 
                         <input
                             type="text"
@@ -70,28 +53,17 @@
                             placeholder="Enter Subject"
                             required>
 
-
                     </div>
-
-
                 </div>
 
 
-
-
-
+                <!-- Mobile Number -->
                 <div class="row">
-
-
-                    <div class="col-md-6 mb-3">
-
+                    <div class="col-md-12 mb-4">
 
                         <label class="form-label">
-
                             Mobile Number
-
                         </label>
-
 
                         <input
                             type="text"
@@ -101,22 +73,17 @@
                             maxlength="10"
                             required>
 
-
                     </div>
+                </div>
 
 
-
-
-
-                    <div class="col-md-6 mb-3">
-
+                <!-- Teaching Timing -->
+                <div class="row">
+                    <div class="col-md-12 mb-4">
 
                         <label class="form-label">
-
                             Teaching Timing
-
                         </label>
-
 
                         <input
                             type="text"
@@ -125,30 +92,17 @@
                             placeholder="Example: 10 AM - 12 PM"
                             required>
 
-
                     </div>
-
-
                 </div>
 
 
-
-
-
-
-
+                <!-- Experience -->
                 <div class="row">
-
-
-                    <div class="col-md-6 mb-3">
-
+                    <div class="col-md-12 mb-4">
 
                         <label class="form-label">
-
                             Experience
-
                         </label>
-
 
                         <input
                             type="text"
@@ -157,29 +111,20 @@
                             placeholder="Example: 5 Years"
                             required>
 
-
                     </div>
-
-
                 </div>
 
 
+                <hr class="my-4">
 
 
-
-                <hr>
-
-
-
+                <!-- Buttons -->
                 <button type="submit" class="btn btn-success">
 
                     <i class="bi bi-check-circle-fill"></i>
-
                     Save Teacher
 
                 </button>
-
-
 
 
                 <a href="/teachers" class="btn btn-secondary">
@@ -188,18 +133,12 @@
 
                 </a>
 
-
-
             </form>
-
 
         </div>
 
-
     </div>
 
-
 </div>
-
 
 {% endblock %}
