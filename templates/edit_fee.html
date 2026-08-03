@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0">
+                <i class="bi bi-pencil-square"></i>
+                Edit Fee
+            </h3>
+        </div>
+
+        <div class="card-body">
+            <form method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Total Fee
+                    </label>
+
+                    <input
+                        type="number"
+                        name="total_fee"
+                        class="form-control"
+                        value="{{ fee.total_fee }}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Paid Fee
+                    </label>
+
+                    <input
+                        type="number"
+                        name="paid_fee"
+                        class="form-control"
+                        value="{{ fee.paid_fee }}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Payment Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="date"
+                        class="form-control"
+                        value="{{ fee.date }}"
+                        required>
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+                    <i class="bi bi-check-circle"></i>
+                    Update Fee
+                </button>
+
+                <a
+                    href="/fees"
+                    class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Back
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
