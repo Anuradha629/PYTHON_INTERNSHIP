@@ -1,14 +1,24 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, url_for,session
 from datetime import date
 import sqlite3
 
 from db import get_connection, init_db
-
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-
 app.secret_key = "bright_future_secret_key"
 
+
+UPLOAD_FOLDER = "static/uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # ================= HOME =================
 
@@ -51,6 +61,7 @@ def dashboard():
 
 
     pending_fee = total_fee - paid_fee
+  
 
 
     attendance = conn.execute("""
@@ -58,6 +69,52 @@ def dashboard():
     FROM attendance
     """).fetchone()[0]
 
+
+
+    # ===== Today Attendance Count =====
+
+    today_date = date.today()
+
+
+    today_present = conn.execute("""
+    SELECT COUNT(*)
+    FROM attendance
+    WHERE date=?
+    AND status='Present'
+    """,
+    (today_date,)
+    ).fetchone()[0]
+
+
+
+    today_absent = conn.execute("""
+    SELECT COUNT(*)
+    FROM attendance
+    WHERE date=?
+    AND status='Absent'
+    """,
+    (today_date,)
+    ).fetchone()[0]
+
+     
+    # ===== Top 5 Students =====
+
+    top_students = conn.execute("""
+    SELECT
+        students.name,
+        students.course,
+        performance.marks,
+        performance.remark
+
+    FROM performance
+
+    INNER JOIN students
+    ON performance.student_id = students.id
+
+    ORDER BY performance.marks DESC
+
+    LIMIT 5
+    """).fetchall()
 
     conn.close()
 
@@ -70,6 +127,9 @@ def dashboard():
         total_fee=total_fee,
         pending_fee=pending_fee,
         attendance=attendance,
+        top_students=top_students,  
+        today_present=today_present,
+        today_absent=today_absent,
         today=date.today()
     )
 
@@ -81,11 +141,7 @@ def dashboard():
 def students():
 
     search = request.args.get("search")
-
-
     conn = get_connection()
-
-
     if search:
 
         students = conn.execute("""
@@ -128,6 +184,9 @@ def students():
 @app.route("/add_student", methods=["GET","POST"])
 def add_student():
 
+    if session.get("role") != "admin":
+            flash("Admins only! You do not have permission.", "danger")
+            return redirect("/students")
 
     if request.method == "POST":
 
@@ -141,173 +200,184 @@ def add_student():
         address = request.form["address"]
         admission_date = request.form["admission_date"]
         status = request.form["status"]
+        photo = request.files.get("photo")
+
+        photo_filename = "default.png"
+
+        if photo and photo.filename:
+
+            if allowed_file(photo.filename):
+
+                photo_filename = secure_filename(photo.filename)
+
+                photo.save(
+                    os.path.join(
+                        app.config["UPLOAD_FOLDER"],
+                        photo_filename
+                    )
+                )
+
+            else:
+
+                flash(
+                    "Only JPG, JPEG and PNG images are allowed.",
+                    "danger"
+                )
+
+                return redirect("/add_student")
 
 
         conn = get_connection()
 
-
         try:
 
             conn.execute("""
-            INSERT INTO students
-            (
-            roll_no,
-            name,
-            father_name,
-            surname,
-            mobile,
-            course,
-            batch,
-            address,
-            admission_date,
-            status
-            )
-
-            VALUES(?,?,?,?,?,?,?,?,?,?)
-
+                INSERT INTO students
+                (
+                    roll_no,name,father_name,surname,mobile,course,batch,address,admission_date,status,photo
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-            roll_no,
-            name,
-            father_name,
-            surname,
-            mobile,
-            course,
-            batch,
-            address,
-            admission_date,
-            status
+                roll_no, name, father_name, surname, mobile, course, batch, address, admission_date, status, photo_filename
             ))
-
 
             conn.commit()
             conn.close()
-
 
             flash(
                 "Student Added Successfully",
                 "success"
             )
 
-
             return redirect("/students")
-
 
         except sqlite3.IntegrityError:
 
-
             conn.close()
-
 
             flash(
                 "Roll Number Already Exists",
                 "danger"
             )
 
-
             return redirect("/add_student")
-
-
 
     return render_template("add_student.html")
 
-
-
 # ================= VIEW STUDENT =================
-
 @app.route("/view_student/<int:id>")
 def view_student(id):
-
     conn = get_connection()
+    cursor = conn.cursor()
 
+    # Student Details
+    cursor.execute("SELECT * FROM students  WHERE id=?", (id,))
+    s = cursor.fetchone()
 
-    student = conn.execute("""
-    SELECT *
-    FROM students
-    WHERE id=?
-    """,
-    (id,)).fetchone()
-
-
+    # Student Performance
+   
+    cursor.execute("SELECT * FROM performance WHERE student_id=?", (id,))
+    performance = cursor.fetchall()
     conn.close()
 
 
     return render_template(
         "view_student.html",
-        s=student
+        s=s,
+        performance=performance
     )
 
-
-
 # ================= EDIT STUDENT =================
-
-@app.route("/edit_student/<int:id>", methods=["GET","POST"])
+@app.route("/edit_student/<int:id>", methods=["GET", "POST"])
 def edit_student(id):
 
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/students")
 
     conn = get_connection()
 
+    student = conn.execute(
+        "SELECT * FROM students WHERE id=?",
+        (id,)
+    ).fetchone()
 
-    student = conn.execute("""
-    SELECT *
-    FROM students
-    WHERE id=?
-    """,
-    (id,)).fetchone()
+    if request.method == "POST":
 
+        # ================= STUDENT PHOTO =================
 
+        photo = request.files.get("photo")
+        # By default, keep the existing photo
+        photo_filename = student["photo"] or "default.png"
 
-    if request.method=="POST":
+        if photo and photo.filename:
 
+            if allowed_file(photo.filename):
+
+                photo_filename = secure_filename(photo.filename)
+
+                photo.save(
+                    os.path.join(
+                        app.config["UPLOAD_FOLDER"],
+                        photo_filename
+                    )
+                )
+
+            else:
+
+                conn.close()
+
+                flash(
+                    "Only JPG, JPEG and PNG images are allowed.",
+                    "danger"
+                )
+
+                return redirect(f"/edit_student/{id}")
+
+        # ================= UPDATE STUDENT =================
 
         conn.execute("""
-        UPDATE students SET
-
-        roll_no=?,
-        name=?,
-        father_name=?,
-        surname=?,
-        mobile=?,
-        course=?,
-        batch=?,
-        address=?,
-        admission_date=?,
-        status=?
-
-        WHERE id=?
-
+            UPDATE students SET
+                roll_no=?,
+                name=?,
+                father_name=?,
+                surname=?,
+                mobile=?,
+                course=?,
+                batch=?,
+                address=?,
+                admission_date=?,
+                status=?,
+                photo=?
+            WHERE id=?
         """,
         (
-        request.form["roll_no"],
-        request.form["name"],
-        request.form["father_name"],
-        request.form["surname"],
-        request.form["mobile"],
-        request.form["course"],
-        request.form["batch"],
-        request.form["address"],
-        request.form["admission_date"],
-        request.form["status"],
-        id
+            request.form["roll_no"],
+            request.form["name"],
+            request.form["father_name"],
+            request.form["surname"],
+            request.form["mobile"],
+            request.form["course"],
+            request.form["batch"],
+            request.form["address"],
+            request.form["admission_date"],
+            request.form["status"],
+            photo_filename,
+            id
         ))
-
 
         conn.commit()
         conn.close()
-
 
         flash(
             "Student Updated Successfully",
             "success"
         )
 
-
         return redirect("/students")
 
-
-
     conn.close()
-
 
     return render_template(
         "edit_student.html",
@@ -315,33 +385,21 @@ def edit_student(id):
     )
 
 
-
 # ================= DELETE STUDENT =================
-
 @app.route("/delete_student/<int:id>")
 def delete_student(id):
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/students")
 
     conn = get_connection()
-
-
-    conn.execute("""
-    DELETE FROM students
-    WHERE id=?
-    """,
-    (id,))
-
-
+    conn.execute(" DELETE FROM students WHERE id=?", (id,))
     conn.commit()
     conn.close()
-
-
     flash(
         "Student Deleted Successfully",
         "success"
     )
-
-
     return redirect("/students")
 
 
@@ -353,8 +411,6 @@ def student_id_card(id):
 
 
     conn = get_connection()
-
-
     student = conn.execute("""
     SELECT *
     FROM students
@@ -370,7 +426,7 @@ def student_id_card(id):
         "student_id_card.html",
         s=student
     )
-# ================= TEACHER MODULE =================
+
 
 
 # -------- TEACHER LIST --------
@@ -379,17 +435,12 @@ def student_id_card(id):
 def teachers():
 
     conn = get_connection()
-
-
     teachers = conn.execute("""
     SELECT *
     FROM teachers
     ORDER BY id ASC
     """).fetchall()
-
-
     conn.close()
-
 
     return render_template(
         "teachers.html",
@@ -403,71 +454,43 @@ def teachers():
 @app.route("/add_teacher", methods=["GET","POST"])
 def add_teacher():
 
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/teachers")
 
     if request.method == "POST":
-
-
         name = request.form["name"]
         subject = request.form["subject"]
         mobile = request.form["mobile"]
         timing = request.form["timing"]
         experience = request.form["experience"]
-
-
         conn = get_connection()
-
 
         conn.execute("""
         INSERT INTO teachers
-        (
-        name,
-        subject,
-        mobile,
-        timing,
-        experience
-        )
-
-        VALUES(?,?,?,?,?)
-
-        """,
-        (
-        name,
-        subject,
-        mobile,
-        timing,
-        experience
-        ))
-
-
+        (name,subject,mobile,timing,experience)VALUES(?,?,?,?,?)""",( name,subject,mobile,timing,experience ))
         conn.commit()
         conn.close()
-
-
         flash(
             "Teacher Added Successfully",
             "success"
         )
 
-
         return redirect("/teachers")
-
-
 
     return render_template(
         "add_teacher.html"
     )
 
-
-
 # -------- EDIT TEACHER --------
 
 @app.route("/edit_teacher/<int:id>", methods=["GET","POST"])
 def edit_teacher(id):
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/teachers")
 
     conn = get_connection()
-
-
     teacher = conn.execute("""
     SELECT *
     FROM teachers
@@ -475,23 +498,9 @@ def edit_teacher(id):
     """,
     (id,)).fetchone()
 
-
-
     if request.method=="POST":
-
-
         conn.execute("""
-        UPDATE teachers SET
-
-        name=?,
-        subject=?,
-        mobile=?,
-        timing=?,
-        experience=?
-
-        WHERE id=?
-
-        """,
+        UPDATE teachers SET name=?, subject=?, mobile=?,  timing=?, experience=?  WHERE id=? """,
         (
         request.form["name"],
         request.form["subject"],
@@ -500,8 +509,6 @@ def edit_teacher(id):
         request.form["experience"],
         id
         ))
-
-
         conn.commit()
         conn.close()
 
@@ -510,15 +517,9 @@ def edit_teacher(id):
             "Teacher Updated Successfully",
             "success"
         )
-
-
         return redirect("/teachers")
 
-
-
     conn.close()
-
-
     return render_template(
         "edit_teacher.html",
         t=teacher
@@ -530,39 +531,25 @@ def edit_teacher(id):
 
 @app.route("/delete_teacher/<int:id>")
 def delete_teacher(id):
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/teachers")
 
     conn = get_connection()
-
-
     conn.execute("""
     DELETE FROM teachers
     WHERE id=?
     """,
     (id,))
-
-
     conn.commit()
     conn.close()
-
-
     flash(
         "Teacher Deleted Successfully",
         "success"
     )
-
-
     return redirect("/teachers")
 
-
-
-
-
 # ================= FEES MODULE =================
-
-
-
-# -------- FEES LIST --------
 
 @app.route("/fees")
 def fees():
@@ -570,6 +557,7 @@ def fees():
     fees = conn.execute("""
     SELECT
     fees.id,
+    fees.receipt_no,
     students.roll_no,
     students.name,
     fees.total_fee,
@@ -579,7 +567,7 @@ def fees():
     FROM fees
     INNER JOIN students
     ON fees.student_id = students.id
-    ORDER BY fees.id DESC
+    ORDER BY fees.id ASC
 
     """).fetchall()
 
@@ -603,96 +591,57 @@ def fees():
     SELECT IFNULL(SUM(total_fee-paid_fee),0)
     FROM fees
     """).fetchone()[0]
-
-
-
     conn.close()
-
-
-
     return render_template(
         "fees.html",
         fees=fees,
         total_collection=total_collection,
         total_students=total_students,
-        pending_fee=pending_fee
+        pending_fee=pending_fee,
+       
     )
 
-
-
-
-
 # -------- COLLECT FEE --------
-
 @app.route("/collect_fee", methods=["GET","POST"])
 def collect_fee():
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/fees")
 
     conn = get_connection()
-
-
-
-    students = conn.execute("""
-    SELECT *
-    FROM students
-    ORDER BY name
-    """).fetchall()
-
-
-
+    students = conn.execute("SELECT * FROM students ORDER BY name").fetchall()
     if request.method=="POST":
-
-
         student_id = request.form["student_id"]
-
         total_fee = request.form["total_fee"]
-
         paid_fee = request.form["paid_fee"]
-
         payment_date = request.form["date"]
+        
+       #Generate unique receipt number
+        last_id = conn.execute("SELECT IFNULL(MAX(id), 0) FROM fees").fetchone()[0]
 
-
-
+        receipt_no = f"BFCC-2026-{last_id+1:04d}"
         conn.execute("""
-        INSERT INTO fees
-
-        (
-        student_id,
-        total_fee,
-        paid_fee,
-        date
-        )
-
-        VALUES(?,?,?,?)
-
+        INSERT INTO fees ( receipt_no, student_id, total_fee, paid_fee, date )
+        VALUES(?,?,?,?,?)
         """,
         (
+        receipt_no,
         student_id,
         total_fee,
         paid_fee,
         payment_date
         ))
 
-
-
         conn.commit()
         conn.close()
-
-
 
         flash(
             "Fee Collected Successfully",
             "success"
         )
-
-
         return redirect("/fees")
 
-
-
     conn.close()
-
-
 
     return render_template(
         "collect_fee.html",
@@ -700,7 +649,37 @@ def collect_fee():
     )
 
 
+@app.route("/edit_fee/<int:id>", methods=["GET", "POST"])
+def edit_fee(id):
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/fees")
+    conn = get_connection()
+    fee = conn.execute("SELECT * FROM fees WHERE id=?", (id,)).fetchone()
+    if request.method == "POST":
+        conn.execute("""
+        UPDATE fees
+        SET
+            total_fee=?,
+            paid_fee=?,
+            date=?
+        WHERE id=?
+        """,
+        (
+            request.form["total_fee"],
+            request.form["paid_fee"],
+            request.form["date"],
+            id
+        ))
 
+        conn.commit()
+        conn.close()
+
+        flash("Fee Updated Successfully", "success")
+        return redirect("/fees")
+
+    conn.close()
+    return render_template("edit_fee.html", fee=fee)
 
 
 # -------- FEE RECEIPT --------
@@ -709,149 +688,112 @@ def collect_fee():
 def fee_receipt(id):
     conn = get_connection()
 
-
     receipt = conn.execute("""
     SELECT
-
     fees.id,
-
+    fees.receipt_no,
     students.roll_no,
-
     students.name,
-
     students.course,
-
     fees.total_fee,
-
     fees.paid_fee,
-
     (fees.total_fee - fees.paid_fee) AS pending_fee,
-
     fees.date
-
-
     FROM fees
-
-
     INNER JOIN students
-
-
     ON fees.student_id = students.id
-
-
     WHERE fees.id=?
 
     """,
     (id,)).fetchone()
 
-
-
     conn.close()
-
-
-
     return render_template(
         "fee_receipt.html",
         receipt=receipt
     )
 
 
-# -------- ATTENDANCE LIST + ADD --------
 
+
+# -------- ATTENDANCE LIST + ADD --------
 @app.route("/attendance", methods=["GET","POST"])
 def attendance():
-
-
     conn = get_connection()
-
-
-    students = conn.execute("""
-    SELECT *
-    FROM students
-    ORDER BY name
-    """).fetchall()
-
-
-
-    if request.method=="POST":
-
-
-        student_id = request.form["student_id"]
-
+    # All Students
+    students = conn.execute(" SELECT * FROM students  ORDER BY roll_no ").fetchall()
+    if request.method == "POST":
+        
+        # Only Admin can save attendance
+        if session.get("role") != "admin":
+            flash(
+                "Admins only! You do not have permission.",
+                "danger"
+            )
+            conn.close()
+            return redirect("/attendance")
+        
         attendance_date = request.form["date"]
+        for student in students:
+            student_id = student["id"]
+            status = request.form.get(
+                f"status_{student_id}"
+            )
 
-        status = request.form["status"]
 
+            # Check duplicate attendance
 
+            existing = conn.execute("  SELECT *  FROM attendance  WHERE student_id=?  AND date=? ",
+            (student_id,attendance_date)).fetchone()
 
-        conn.execute("""
-        INSERT INTO attendance
+            if existing:
+                # Update existing attendance
 
-        (
-        student_id,
-        date,
-        status
-        )
+                conn.execute("UPDATE attendance SET status=? WHERE student_id=?  AND date=?",
+                (status, student_id, attendance_date  ))
+            else:
+                # Insert new attendance
 
-        VALUES(?,?,?)
+                conn.execute("""
+                    INSERT INTO attendance
+                    (student_id,date,status
+                    )
+                    VALUES(?,?,?)
 
-        """,
-        (
-        student_id,
-        attendance_date,
-        status
-        ))
-
+                """,
+                (
+                    student_id,
+                    attendance_date,
+                    status
+                ))
 
         conn.commit()
         conn.close()
 
-
         flash(
-            "Attendance Added Successfully",
-            "success"
-        )
-
-
+            "Attendance Saved Successfully", "success" )
         return redirect("/attendance")
 
 
-
+    # Attendance Records
 
     attendance = conn.execute("""
-    SELECT
-
-    attendance.id,
-
-    students.name,
-
-    students.roll_no,
-
-    attendance.date,
-
-    attendance.status
-
-
-    FROM attendance
-
-
-    INNER JOIN students
-
-
-    ON attendance.student_id = students.id
-
-
-    ORDER BY attendance.id DESC
-
+        SELECT
+        attendance.id,
+        students.roll_no,
+        students.name,
+        students.course,
+        attendance.date,
+        attendance.status
+        FROM attendance
+        INNER JOIN students
+        ON attendance.student_id = students.id
+        ORDER BY attendance.date DESC,
+        students.roll_no ASC
 
     """).fetchall()
 
-
-
     conn.close()
-
-
-
     return render_template(
         "attendance.html",
         students=students,
@@ -859,34 +801,20 @@ def attendance():
     )
 
 
-
-
-
 # -------- EDIT ATTENDANCE --------
 
 @app.route("/edit_attendance/<int:id>", methods=["GET","POST"])
 def edit_attendance(id):
-
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/attendance")
     conn = get_connection()
-
-
-
-    record = conn.execute("""
-    SELECT *
-    FROM attendance
-    WHERE id=?
-    """,
-    (id,)).fetchone()
-
-
+    record = conn.execute("SELECT * FROM attendance WHERE id=? ", (id,)).fetchone()
 
     if request.method=="POST":
 
-
         conn.execute("""
         UPDATE attendance SET
-
         date=?,
         status=?
 
@@ -898,57 +826,33 @@ def edit_attendance(id):
         request.form["status"],
         id
         ))
-
-
         conn.commit()
         conn.close()
-
-
 
         flash(
             "Attendance Updated Successfully",
             "success"
         )
-
-
         return redirect("/attendance")
 
-
-
     conn.close()
-
-
-
     return render_template(
         "edit_attendance.html",
         record=record
     )
 
 
-
-
-
 # -------- DELETE ATTENDANCE --------
 
 @app.route("/delete_attendance/<int:id>")
 def delete_attendance(id):
-
-
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/attendance")
     conn = get_connection()
-
-
-    conn.execute("""
-    DELETE FROM attendance
-    WHERE id=?
-    """,
-    (id,))
-
-
+    conn.execute(" DELETE FROM attendance  WHERE id=?",(id,))
     conn.commit()
     conn.close()
-
-
-
     flash(
         "Attendance Deleted Successfully",
         "success"
@@ -957,111 +861,155 @@ def delete_attendance(id):
 
     return redirect("/attendance")
 
+@app.route("/register", methods=["GET","POST"])
+def register():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Check existing user
+        cursor.execute("""
+            SELECT * FROM users 
+            WHERE username=? OR email=?
+        """, (username, email))
+
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            flash("Username or Email already exists. Please use another one.", "danger")
+            conn.close()
+            return redirect("/register")
 
 
+        hashed_password = generate_password_hash(password)
+
+        cursor.execute("""
+            INSERT INTO users(username,email,password)
+            VALUES(?,?,?)
+        """, (username, email, hashed_password))
+
+        conn.commit()
+        conn.close()
+
+        flash("Registration successful. Please login.", "success")
+        return redirect("/login")
+
+    return render_template("register.html")
 
 
+#=========Login route==========
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+    if request.method=="POST":
+        username=request.form["username"]
+        password=request.form["password"]
+        conn=get_connection()
+        cursor=conn.cursor()
+        cursor.execute(
+        "SELECT * FROM users WHERE username=? OR email=?",
+        (username,username)
+        )
+        user=cursor.fetchone()
+        conn.close()
 
 
-# ================= REPORTS MODULE =================
+        if user and check_password_hash(user["password"],password):
+
+            session["user_id"]=user["id"]
+            session["username"]=user["username"]
+            session["role"]=user["role"]
+
+            flash(f"Welcome {user['username']}! Login successful.", "success")
+            return redirect("/")
+        else:
+
+            flash("Invalid username or password. Please try again.", "danger")
+
+    return render_template("login.html")
+
+#==========Logout route==========
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out .", "danger")
+    return redirect("/login")
 
 
-@app.route("/reports")
-def reports():
+#==========Performance=======
+@app.route("/performance")
+def performance():
 
+    conn=get_connection()
+    cursor=conn.cursor()
+    cursor.execute("""
+    SELECT 
+    performance.*,
+    students.name,
+    students.course
+    FROM performance
+    JOIN students
+    ON performance.student_id = students.id
+    """)
+    data=cursor.fetchall()
+    conn.close()
+    return render_template(
+        "performance.html",
+        performance=data
+    )
+
+#======marks according Performance=======
+
+@app.route("/add_performance", methods=["GET","POST"])
+def add_performance():
+    if session.get("role") != "admin":
+        flash("Admins only! You do not have permission.", "danger")
+        return redirect("/performance")
 
     conn = get_connection()
+    cursor = conn.cursor()
+
+
+    if request.method == "POST":
+
+        student_id = request.form["student_id"]
+
+        marks = int(request.form["marks"])
+
+
+        if marks >= 90:
+            remark = "Excellent"
+
+        elif marks >= 75:
+            remark = "Very Good"
+
+        elif marks >= 60:
+            remark = "Good"
+
+        else:
+            remark = "Needs Improvement"
 
 
 
-    # Student Count
+        cursor.execute(" INSERT INTO performance (student_id, marks, remark) VALUES (?,?,?) ",
+        ( student_id, marks, remark ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("performance"))
 
-    total_students = conn.execute("""
-    SELECT COUNT(*)
-    FROM students
-    """).fetchone()[0]
+    cursor.execute("SELECT id,name,course FROM students")
 
-
-
-
-    # Fees Report
-
-    total_fee = conn.execute("""
-    SELECT IFNULL(SUM(total_fee),0)
-    FROM fees
-    """).fetchone()[0]
-
-
-
-    paid_fee = conn.execute("""
-    SELECT IFNULL(SUM(paid_fee),0)
-    FROM fees
-    """).fetchone()[0]
-
-
-
-    pending_fee = total_fee - paid_fee
-
-
-
-
-
-    # Attendance Report
-
-
-    total_attendance = conn.execute("""
-    SELECT COUNT(*)
-    FROM attendance
-    """).fetchone()[0]
-
-    present = conn.execute("""
-    SELECT COUNT(*)
-    FROM attendance
-    WHERE status='Present'
-    """).fetchone()[0]
-
-
-    absent = conn.execute("""
-    SELECT COUNT(*)
-    FROM attendance
-    WHERE status='Absent'
-    """).fetchone()[0]
-
-
-    if total_attendance > 0:
-        attendance_percentage = round(
-            (present / total_attendance) * 100,
-            2
-        )
-
-    else:
-
-        attendance_percentage = 0
-
-
-    # Course Wise Report
-    courses = conn.execute("""
-    SELECT
-    course,
-    COUNT(*) as count
-    FROM students
-    GROUP BY course
-
-    """).fetchall()
+    students = cursor.fetchall()
     conn.close()
-
     return render_template(
-        "reports.html",
-
-        total_students=total_students,
-        total_fee=total_fee,
-        paid_fee=paid_fee,
-        pending_fee=pending_fee,
-        total_attendance=total_attendance,
-        present=present,
-        absent=absent,
-        attendance_percentage=attendance_percentage,
-        courses=courses
+        "add_performance.html",
+        students=students
     )
 
 # ================= START APPLICATION =================
