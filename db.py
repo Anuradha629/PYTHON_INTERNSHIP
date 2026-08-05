@@ -1,6 +1,5 @@
 import sqlite3
-
-DATABASE = "coaching.db"
+DATABASE = "/home/AnuradhaKarhale/coaching.db"
 
 
 # ================= DATABASE CONNECTION =================
