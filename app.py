@@ -139,6 +139,7 @@ def dashboard():
 
 @app.route("/students")
 def students():
+    
 
     search = request.args.get("search")
     conn = get_connection()
