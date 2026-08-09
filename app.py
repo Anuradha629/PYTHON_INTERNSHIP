@@ -262,7 +262,7 @@ def dashboard():
     """).fetchone()[0]
 
     # ===== Today Attendance Count =====
-    today_date = date.today()
+    today_date = date.today().isoformat()
     today_present = conn.execute("""
     SELECT COUNT(*)
     FROM attendance
