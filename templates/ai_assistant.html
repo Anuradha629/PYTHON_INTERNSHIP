@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- AI ASSISTANT CARD -->
+<div
+    class="card border-0 shadow-lg overflow-hidden mx-auto"
+    style="
+    border-radius:24px;
+    max-width:900px;
+    ">
+
+    <!-- HEADER -->
+    <div
+        class="text-center text-white px-3 py-3"
+        style="
+        background:linear-gradient(135deg,#312e81,#6d28d9,#0891b2);
+        ">
+
+        <div style="font-size:30px; line-height:1;">
+            🤖
+        </div>
+
+        <h4 class="fw-bold mb-1 mt-2">
+            Bright Future AI Assistant
+        </h4>
+
+        <p class="mb-2 small" style="opacity:.9;">
+            Ask about students, fees, attendance, performance and teacher 
+        </p>
+
+        <span
+            class="badge rounded-pill px-3 py-1"
+            style="
+            background:#16a34a;
+            font-size:11px;
+            ">
+            ● Online
+        </span>
+
+    </div>
+
+
+    <!-- QUICK OPTIONS -->
+    <div class="px-4 pt-3 pb-2">
+
+        <div class="text-center mb-2">
+            <small
+                class="fw-semibold"
+                style="color:#64748b;font-size:11px;">
+                Quick Questions
+            </small>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#ddd6fe;color:#5b21b6;">
+                🏆 Top Performers
+            </span>
+
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#dbeafe;color:#1d4ed8;">
+                👨‍🎓 Students
+            </span>
+
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#fef3c7;color:#92400e;">
+                💰 Fees
+            </span>
+
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#dcfce7;color:#166534;">
+                📊 Performance
+            </span>
+
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#cffafe;color:#155e75;">
+                ✅ Attendance
+            </span>
+            <span
+                class="badge rounded-pill px-3 py-2"
+                style="background:#fef3c7;color:#92400e;">
+                👨‍🏫 Teachers
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHAT AREA -->
+    <div
+        class="px-4 py-3"
+        style="
+        background:linear-gradient(180deg,#f8fafc,#ffffff);
+        min-height:180px;
+        ">
+
+        <!-- AI WELCOME -->
+        <div class="d-flex align-items-start gap-2 mb-3">
+
+            <div
+                style="
+                flex-shrink:0;
+                width:36px;
+                height:36px;
+                border-radius:50%;
+                background:linear-gradient(135deg,#ddd6fe,#c4b5fd);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:19px;
+                ">
+                🤖
+            </div>
+
+            <div style="max-width:650px;">
+
+                <div
+                    class="fw-semibold mb-1"
+                    style="
+                    color:#4c1d95;
+                    font-size:13px;
+                    ">
+                    Bright Future AI
+                </div>
+
+                <div
+                    class="px-3 py-2 rounded-4"
+                    style="
+                    background:#ffffff;
+                    border:1px solid #ddd6fe;
+                    color:#334155;
+                    font-size:13px;
+                    line-height:1.5;
+                    box-shadow:0 2px 8px rgba(0,0,0,.04);
+                    ">
+
+                    👋 Hello! I can help you with students,
+                    fees, attendance and performance information.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- USER QUESTION -->
+        {% if request.form.get('question') %}
+
+        <div class="d-flex justify-content-end mb-3">
+
+            <div
+                class="px-3 py-2 rounded-4 text-white"
+                style="
+                background:linear-gradient(135deg,#0f766e,#0891b2);
+                max-width:65%;
+                font-size:13px;
+                line-height:1.5;
+                box-shadow:0 2px 8px rgba(8,145,178,.15);
+                ">
+
+                {{ request.form.get('question') }}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- AI ANSWER -->
+        {% if answer %}
+
+        <div class="d-flex align-items-start gap-2">
+
+            <div
+                style="
+                flex-shrink:0;
+                width:36px;
+                height:36px;
+                border-radius:50%;
+                background:linear-gradient(135deg,#ddd6fe,#c4b5fd);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:19px;
+                ">
+                🤖
+            </div>
+
+            <div style="max-width:700px;">
+
+                <div
+                    class="fw-semibold mb-1"
+                    style="
+                    color:#4c1d95;
+                    font-size:13px;
+                    ">
+                    Bright Future AI
+                </div>
+
+                <div
+                    id="aiAnswer"
+                    class="px-3 py-2 rounded-4"
+                    style="
+                    background:#ffffff;
+                    border:1px solid #e2e8f0;
+                    color:#334155;
+                    line-height:1.6;
+                    font-size:13px;
+                    white-space:pre-line;
+                    box-shadow:0 2px 8px rgba(0,0,0,.04);
+                    ">
+
+                    {{ answer }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- INPUT AREA -->
+    <div class="px-4 pt-2 pb-2">
+
+        <form method="POST">
+
+            <div
+                class="d-flex align-items-center gap-2 p-2"
+                style="
+                background:#ffffff;
+                border-radius:30px;
+                border:1px solid #cbd5e1;
+                box-shadow:0 3px 12px rgba(15,23,42,.06);
+                ">
+
+                <span
+                    class="ms-2"
+                    style="
+                    font-size:16px;
+                    color:#64748b;
+                    ">
+                    💬
+                </span>
+
+                <input
+                    type="text"
+                    name="question"
+                    class="form-control border-0 bg-transparent shadow-none"
+                    style="
+                    font-size:13px;
+                    "
+                    placeholder="Ask about your coaching class..."
+                    required>
+
+                <button
+                    type="submit"
+                    class="btn text-white rounded-pill px-3"
+                    style="
+                    background:linear-gradient(135deg,#2563eb,#7c3aed);
+                    font-size:12px;
+                    white-space:nowrap;
+                    ">
+                    🚀 Send
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-warning rounded-pill px-3"
+                    onclick="speakAnswer()"
+                    style="
+                    font-size:12px;
+                    white-space:nowrap;
+                    ">
+                    🔊
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div
+        class="text-center pb-3 px-3">
+
+        <small
+            class="text-muted"
+            style="font-size:10px;">
+
+            <i class="bi bi-shield-check"></i>
+
+            AI responses are based on 
+            <strong>Bright Future Coaching database</strong>.
+
+        </small>
+
+    </div>
+
+</div>
+<script>
+function speakAnswer() {
+
+    const answerElement = document.getElementById("aiAnswer");
+
+    if (!answerElement) {
+        return;
+    }
+
+    const answer = answerElement.innerText.trim();
+
+    if (!answer) {
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(answer);
+
+    speech.lang = "en-IN";
+    speech.rate = 0.9;
+    speech.pitch = 1;
+
+    window.speechSynthesis.speak(speech);
+}
+</script>
+
+
+{% endblock %}

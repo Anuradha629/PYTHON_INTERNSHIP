@@ -3,6 +3,7 @@ from datetime import date
 import sqlite3
 
 from db import get_connection, init_db
+from groq import Groq
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from werkzeug.utils import secure_filename
@@ -10,11 +11,19 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = "bright_future_secret_key"
 
+# ================= GROQ AI CONFIGURATION =================
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+groq_client = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
+)
 
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
@@ -27,55 +36,233 @@ def home():
     return render_template("home.html")
 
 
+# ================= AI DATABASE ANALYSIS =================
+def ask_ai(question):
+    conn = get_connection()
+
+    # ================= STUDENTS DATA =================
+    students = conn.execute("""
+        SELECT id, roll_no, name, course, batch, status
+        FROM students
+        ORDER BY roll_no
+    """).fetchall()
+
+    # ================= TEACHERS DATA =================
+    teachers = conn.execute("""
+        SELECT name, subject, mobile, timing, experience
+        FROM teachers
+        ORDER BY name
+    """).fetchall()
+
+
+    # ================= FEES DATA =================
+    fees = conn.execute("""
+        SELECT students.name, students.roll_no, fees.total_fee, fees.paid_fee,
+            (fees.total_fee - fees.paid_fee) AS pending_fee,
+            fees.date
+        FROM fees
+        INNER JOIN students
+        ON fees.student_id = students.id
+        ORDER BY students.name
+    """).fetchall()
+
+
+    # ================= ATTENDANCE DATA =================
+    attendance = conn.execute("""
+        SELECT  students.name, students.roll_no, attendance.date, attendance.status
+        FROM attendance
+        INNER JOIN students
+        ON attendance.student_id = students.id
+        ORDER BY attendance.date DESC
+    """).fetchall()
+
+
+    # ================= PERFORMANCE DATA =================
+    performance = conn.execute("""
+        SELECT students.name, students.roll_no, performance.marks, performance.remark
+        FROM performance
+        INNER JOIN students
+        ON performance.student_id = students.id
+        ORDER BY performance.marks DESC
+    """).fetchall()
+
+
+    conn.close()
+
+
+    # ================= PREPARE DATABASE CONTEXT =================
+
+    student_data = "\n".join(
+        f"Roll No: {s['roll_no']}, "
+        f"Name: {s['name']}, "
+        f"Course: {s['course']}, "
+        f"Batch: {s['batch']}, "
+        f"Status: {s['status']}"
+        for s in students
+    )
+
+    teacher_data = "\n".join(
+    f"Teacher: {t['name']}, "
+    f"Subject: {t['subject']}, "
+    f"Mobile: {t['mobile']}, "
+    f"Timing: {t['timing']}, "
+    f"Experience: {t['experience']} years"
+    for t in teachers
+    )
+
+
+    fee_data = "\n".join(
+        f"Student: {f['name']}, "
+        f"Roll No: {f['roll_no']}, "
+        f"Total Fee: ₹{f['total_fee']}, "
+        f"Paid: ₹{f['paid_fee']}, "
+        f"Pending: ₹{f['pending_fee']}, "
+        f"Date: {f['date']}"
+        for f in fees
+    )
+
+
+    attendance_data = "\n".join(
+        f"Student: {a['name']}, "
+        f"Roll No: {a['roll_no']}, "
+        f"Date: {a['date']}, "
+        f"Status: {a['status']}"
+        for a in attendance
+    )
+
+
+    performance_data = "\n".join(
+        f"Student: {p['name']}, "
+        f"Roll No: {p['roll_no']}, "
+        f"Marks: {p['marks']}, "
+        f"Remark: {p['remark']}"
+        for p in performance
+    )
+
+    # ================= AI PROMPT =================
+
+    database_context = f"""
+STUDENT DATA:
+{student_data if student_data else "No student records found."}
+
+FEE DATA:
+{fee_data if fee_data else "No fee records found."}
+
+ATTENDANCE DATA:
+{attendance_data if attendance_data else "No attendance records found."}
+
+PERFORMANCE DATA:
+{performance_data if performance_data else "No performance records found."}
+
+TEACHER DATA:
+{teacher_data if teacher_data else "No teacher records found."}
+"""
+
+
+    # ================= GROQ AI =================
+    response = groq_client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+
+            {
+                "role": "system",
+                "content": """
+You are the AI Assistant of Bright Future Coaching Classes.
+
+You are connected to the coaching class management database.
+
+IMPORTANT RULES:
+1. Answer questions using ONLY the database information provided by the application.
+2. Do NOT invent student names, fees, attendance, marks or any other information.
+3. Keep the answer short and concise.
+4. Answer in maximum 4-5 sentences.
+5. If the requested information is not available in the database, clearly say:
+   "This information is not available in the database."
+6. For pending fee use:
+   Pending Fee = Total Fee - Paid Fee
+7. Give clear, simple and professional answers.
+8. If useful, show calculations.
+9. If a Course exists in the database, explain it using general knowledge.
+If a Course is not in the database, say: "This Course is not available in Bright Future Coaching Classes."
+10. You can provide suggestions for coaching management, but clearly separate suggestions from actual database information.
+If the question is about a course in our database, answer it normally using your knowledge. 
+Don't say the information is unavailable.
+"""
+            },
+
+            {
+                "role": "user",
+                "content": f"""
+DATABASE INFORMATION:
+
+{database_context}
+
+USER QUESTION:
+
+{question}
+"""
+            }
+
+        ],
+
+        temperature=0.2
+    )
+    return response.choices[0].message.content
+# ================= AI ASSISTANT =================
+@app.route("/ai-assistant", methods=["GET", "POST"])
+def ai_assistant():
+    answer = None
+    if request.method == "POST":
+        question = request.form.get("question", "").strip()
+        if question:
+            try:
+                answer = ask_ai(question)
+            except Exception as e:
+
+                print("Groq Error:", e)
+
+                answer = "AI service is currently unavailable. Please try again."
+
+    return render_template(
+        "ai_assistant.html",
+        answer=answer
+    )
 
 # ================= DASHBOARD =================
-
 @app.route("/dashboard")
 def dashboard():
 
     conn = get_connection()
-
 
     students = conn.execute("""
     SELECT COUNT(*)
     FROM students
     """).fetchone()[0]
 
-
     teachers = conn.execute("""
     SELECT COUNT(*)
     FROM teachers
     """).fetchone()[0]
-
 
     paid_fee = conn.execute("""
     SELECT IFNULL(SUM(paid_fee),0)
     FROM fees
     """).fetchone()[0]
 
-
     total_fee = conn.execute("""
     SELECT IFNULL(SUM(total_fee),0)
     FROM fees
     """).fetchone()[0]
 
-
     pending_fee = total_fee - paid_fee
   
-
-
     attendance = conn.execute("""
     SELECT COUNT(*)
     FROM attendance
     """).fetchone()[0]
 
-
-
     # ===== Today Attendance Count =====
-
     today_date = date.today()
-
-
     today_present = conn.execute("""
     SELECT COUNT(*)
     FROM attendance
@@ -84,8 +271,6 @@ def dashboard():
     """,
     (today_date,)
     ).fetchone()[0]
-
-
 
     today_absent = conn.execute("""
     SELECT COUNT(*)

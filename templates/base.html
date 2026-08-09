@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
-Bright Future Coaching Manager
+Bright Future Coaching Classes
 </title>
 
 <!-- Bootstrap CSS -->
@@ -49,6 +49,73 @@ body{
 }
 </style>
 
+
+<!---------------about animation---------------------->
+<style>
+/* ===== PAGE ANIMATION ===== */
+body {
+    animation: pageFade 0.5s ease;
+}
+
+@keyframes pageFade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== CARD HOVER ===== */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+}
+
+/* ===== BUTTON HOVER ===== */
+.btn {
+    transition: all 0.25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== NAVBAR LINKS ===== */
+.nav-link {
+    transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== TABLE ROW ===== */
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    transform: scale(1.01);
+}
+
+/* ===== ICON ===== */
+.feature-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .feature-icon {
+    transform: scale(1.12) rotate(3deg);
+}
+</style>
+
+<!------------------------------------->
 </head>
 <body>
 
@@ -117,7 +184,17 @@ id="navbarNav">
 📊 Dashboard
 </a>
 </li>
+
+
+<li class="nav-item">
+
+    <a class="nav-link fw-bold fs-6 text-white"
+       href="{{ url_for('ai_assistant') }}">
+        🤖AI Assistant
+    </a>
+</li>
 </ul>
+
 
 
 <!-- Search 
