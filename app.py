@@ -14,8 +14,8 @@ app.secret_key = "bright_future_secret_key"
 # ================= GROQ AI CONFIGURATION =================
 
 from dotenv import load_dotenv
-
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 groq_client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
