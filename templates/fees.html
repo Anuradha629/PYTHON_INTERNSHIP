@@ -1,198 +1,656 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 
-<!-- HEADER -->
-<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+<style>
+
+/* ===============================
+   FEES PAGE
+================================ */
+
+.fees-page {
+    animation: pageFade 0.6s ease;
+}
+
+@keyframes pageFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 
-<div>
-<h2 class="fw-bold text-primary">
-💰Fees 
-</h2>
+/* ===============================
+   HEADER
+================================ */
+
+.fees-header {
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+.fees-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fees-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    font-size: 22px;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.fees-title h2 {
+    font-size: 25px;
+    margin: 0;
+    color: #172554;
+}
+
+.fees-title p {
+    margin: 3px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
 
 
-<p class="text-muted mb-0">
-Track student payments and pending fees
-</p>
+/* ===============================
+   COLLECT BUTTON
+================================ */
+
+.collect-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.20);
+}
+
+.collect-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(22, 163, 74, 0.28);
+}
+
+
+/* ===============================
+   SUMMARY CARDS
+================================ */
+
+.fee-summary-card {
+    position: relative;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 18px !important;
+    min-height: 165px;
+    padding: 24px !important;
+    transition: all 0.35s ease;
+}
+
+.fee-summary-card::before {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.10);
+    right: -35px;
+    top: -45px;
+}
+
+.fee-summary-card::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    left: -30px;
+    bottom: -35px;
+}
+
+.fee-summary-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18) !important;
+}
+
+.fee-summary-icon {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(5px);
+    font-size: 25px;
+    transition: transform 0.3s ease;
+}
+
+.fee-summary-card:hover .fee-summary-icon {
+    transform: scale(1.12) rotate(-3deg);
+}
+
+.fee-summary-card h6 {
+    letter-spacing: 0.4px;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.fee-summary-card h3 {
+    font-size: 25px;
+    margin-bottom: 0;
+}
+
+
+/* ===============================
+   TABLE CONTAINER
+================================ */
+
+.fee-table-card {
+    border-radius: 18px !important;
+    overflow: hidden;
+    border: 1px solid #e2e8f0 !important;
+    background: white;
+}
+
+.fee-table-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.fee-table-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.fee-table-header small {
+    color: #64748b;
+}
+
+
+/* ===============================
+   TABLE
+================================ */
+
+.fee-table {
+    margin-bottom: 0;
+    min-width: 1050px;
+}
+
+.fee-table thead th {
+    background: #172033 !important;
+    color: #f8fafc !important;
+    border: none;
+    padding: 15px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.fee-table thead th i {
+    margin-right: 5px;
+    opacity: 0.85;
+}
+
+.fee-table tbody tr {
+    transition: all 0.25s ease;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.fee-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.002);
+    box-shadow: inset 4px 0 0 #4f46e5;
+}
+
+.fee-table tbody td {
+    padding: 15px 13px;
+    font-size: 14px;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.student-name {
+    color: #172033 !important;
+    font-weight: 650;
+}
+
+
+/* ===============================
+   BADGES
+================================ */
+
+.receipt-badge {
+    background: #1e293b;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+}
+
+.roll-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-weight: 700;
+}
+
+.paid-badge {
+    background: #ecfdf5;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-weight: 700;
+}
+
+.pending-badge {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-weight: 700;
+}
+
+.total-fee {
+    font-weight: 700;
+    color: #334155;
+}
+
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+
+.action-btn {
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.receipt-btn {
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.16);
+}
+
+.edit-btn {
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);
+}
+
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+    .fees-header {
+        padding: 18px;
+    }
+
+    .fees-title h2 {
+        font-size: 21px;
+    }
+
+    .collect-btn {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .fee-summary-card {
+        min-height: 145px;
+    }
+
+    .fee-table-card {
+        border-radius: 14px !important;
+    }
+
+}
+
+</style>
+
+
+<div class="fees-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="fees-header">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <div class="fees-title">
+
+                <div class="fees-icon">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <div>
+                    <h2 class="fw-bold">
+                        Fees
+                    </h2>
+
+                    <p>
+                        Track student payments and pending fees
+                    </p>
+                </div>
+
+            </div>
+
+
+            {% if session.get("role") == "admin" %}
+
+            <a href="/collect_fee"
+               class="btn btn-success collect-btn">
+
+                <i class="bi bi-plus-circle-fill me-1"></i>
+                Collect Fee
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SUMMARY CARDS ================= -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- TOTAL COLLECTION -->
+
+        <div class="col-md-4">
+
+            <div class="card fee-summary-card shadow-lg text-center bg-success text-white">
+
+                <div class="fee-summary-icon">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <h6 class="mt-3 fw-bold">
+                    Total Collection
+                </h6>
+
+                <h3 class="fw-bold">
+                    ₹ {{ total_collection }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL STUDENTS -->
+
+        <div class="col-md-4">
+
+            <div class="card fee-summary-card shadow-lg text-center bg-primary text-white">
+
+                <div class="fee-summary-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h6 class="mt-3 fw-bold">
+                    Total Students
+                </h6>
+
+                <h3 class="fw-bold">
+                    {{ total_students }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING FEES -->
+
+        <div class="col-md-4">
+
+            <div class="card fee-summary-card shadow-lg text-center bg-danger text-white">
+
+                <div class="fee-summary-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+
+                <h6 class="mt-3 fw-bold">
+                    Pending Fees
+                </h6>
+
+                <h3 class="fw-bold">
+                    ₹ {{ pending_fee }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FEE TABLE ================= -->
+
+    <div class="card fee-table-card shadow-lg">
+
+
+        <!-- TABLE HEADER -->
+
+        <div class="fee-table-header">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                <div>
+
+                    <h5>
+                        <i class="bi bi-receipt-cutoff me-2 text-primary"></i>
+                        Fee Records
+                    </h5>
+
+                    <small>
+                        Student payment and receipt details
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle fee-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            <i class="bi bi-hash"></i>
+                            ID
+                        </th>
+
+                        <th>
+                            <i class="bi bi-receipt"></i>
+                            Receipt No
+                        </th>
+
+                        <th>
+                            <i class="bi bi-person-vcard"></i>
+                            Roll No
+                        </th>
+
+                        <th>
+                            <i class="bi bi-person-fill"></i>
+                            Student Name
+                        </th>
+
+                        <th>
+                            <i class="bi bi-currency-rupee"></i>
+                            Total Fee
+                        </th>
+
+                        <th>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Paid
+                        </th>
+
+                        <th>
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            Pending
+                        </th>
+
+                        <th>
+                            <i class="bi bi-calendar-event"></i>
+                            Date
+                        </th>
+
+                        <th>
+                            <i class="bi bi-gear-fill"></i>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for f in fees %}
+
+                    <tr>
+
+                        <td class="fw-bold">
+                            {{ f.id }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge receipt-badge">
+                                {{ f.receipt_no }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge roll-badge">
+                                {{ f.roll_no }}
+                            </span>
+
+                        </td>
+
+
+                        <td class="student-name">
+                            {{ f.name }}
+                        </td>
+
+
+                        <td class="total-fee">
+                            ₹ {{ f.total_fee }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge paid-badge">
+                                ₹ {{ f.paid_fee }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge pending-badge">
+                                ₹ {{ f.total_fee - f.paid_fee }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            {{ f.date }}
+                        </td>
+
+
+                        <td>
+
+                            <div class="d-flex gap-1">
+
+                                <a href="/fee_receipt/{{ f.id }}"
+                                   class="btn btn-primary btn-sm action-btn receipt-btn">
+
+                                    <i class="bi bi-receipt-cutoff me-1"></i>
+                                    Receipt
+
+                                </a>
+
+
+                                <a href="/edit_fee/{{ f.id }}"
+                                   class="btn btn-warning btn-sm action-btn edit-btn"
+                                   title="Edit Fee">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 </div>
 
-
-{% if session.get("role") == "admin" %}
-<a href="/collect_fee" 
-class="btn btn-success shadow">
-<i class="bi bi-plus-circle-fill"></i>
-Collect Fee
-</a>
-{% endif %}
-</div>
-
-
-<!-- SUMMARY CARDS -->
-
-<div class="row g-3 mb-4">
-<!-- TOTAL COLLECTION -->
-<div class="col-md-4">
-<div class="card shadow-lg border-0 text-center p-4 bg-success text-white">
-<i class="bi bi-wallet2 fs-1"></i>
-<h6 class="mt-3 fw-bold">
-Total Collection
-</h6>
-
-<h3 class="fw-bold">
-₹ {{ total_collection }}
-</h3>
-</div>
-</div>
-
-
-<!-- TOTAL STUDENTS -->
-<div class="col-md-4">
-<div class="card shadow-lg border-0 text-center p-4 bg-primary text-white">
-<i class="bi bi-people-fill fs-1"></i>
-<h6 class="mt-3 fw-bold">
-Total Students
-</h6>
-
-<h3 class="fw-bold">
-{{ total_students }}
-</h3>
-</div>
-</div>
-
-
-<!-- PENDING FEES -->
-<div class="col-md-4">
-<div class="card shadow-lg border-0 text-center p-4 bg-danger text-white">
-<i class="bi bi-exclamation-triangle-fill fs-1"></i>
-<h6 class="mt-3 fw-bold">
-Pending Fees
-</h6>
-
-<h3 class="fw-bold">
-₹ {{ pending_fee }}
-</h3>
-</div>
-</div>
-</div>
-
-<!-- FEE TABLE -->
-<div class="card shadow-lg border-0 p-3">
-<div class="table-responsive">
-<table class="table table-hover align-middle">
-<thead class="table-dark">
-<tr>
-<th>
-<i class="bi bi-hash"></i>
-ID
-</th>
-<th>
-    <i class="bi bi-receipt"></i>
-    Receipt No
-</th>
-
-
-<th>
-<i class="bi bi-person-vcard"></i>
-Roll No
-</th>
-
-<th>
-<i class="bi bi-person-fill"></i>
-Student Name
-</th>
-
-<th>
-<i class="bi bi-currency-rupee"></i>
-Total Fee
-</th>
-
-<th>
-<i class="bi bi-check-circle-fill"></i>
-Paid
-</th>
-
-<th>
-<i class="bi bi-exclamation-triangle-fill"></i>
-Pending
-</th>
-
-<th>
-<i class="bi bi-calendar-event"></i>
-Date
-</th>
-
-<th>
-<i class="bi bi-gear-fill"></i>
-Action
-</th>
-</tr>
-</thead>
-<tbody>
-
-{% for f in fees %}
-<tr>
-<td class="fw-bold">
-{{ f.id }}
-</td>
-
-
-<td>
-    <span class="badge bg-dark">
-        {{ f.receipt_no }}
-    </span>
-</td>
-
-
-<td>
-<span class="badge bg-primary">
-{{ f.roll_no }}
-</span>
-</td>
-
-<td class="fw-semibold">
-{{ f.name }}
-</td>
-
-
-<td>
-₹ {{ f.total_fee }}
-</td>
-
-<td>
-<span class="badge bg-success">
-₹ {{ f.paid_fee }}
-</span>
-</td>
-
-
-<td>
-<span class="badge bg-danger">
-₹ {{ f.total_fee - f.paid_fee }}
-</span>
-</td>
-
-<td>
-{{ f.date }}
-</td>
-
-<td>
-<a href="/fee_receipt/{{ f.id }}"
-class="btn btn-primary btn-sm shadow">
-<i class="bi bi-receipt-cutoff"></i>
-Receipt
-</a>
-<a href="/edit_fee/{{ f.id }}"
-class="btn btn-warning btn-sm ">
-    <i class="bi bi-pencil-square"></i>
-</a> 
-</td>
-</tr>
-
-{% endfor %}
-</tbody>
-</table>
-</div>
-</div>
 {% endblock %}
