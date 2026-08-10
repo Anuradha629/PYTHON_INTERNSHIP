@@ -1,32 +1,186 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<style>
+    /* ===== THODA DARK PURPLE THEME ===== */
+    body {
+        background-color: #c4b5fd; /* Medium Light Purple Background */
+    }
+    .card {
+        background-color: #ede9fe; /* Light Purple Card */
+        border: 1px solid #a78bfa;
+        color: #3b0764; /* Darker Purple Text */
+    }
+    .table-dark {
+        background-color: #5b21b6 !important; /* Dark Purple Header */
+        color: #fff;
+    }
+    .table-hover tbody tr {
+        color: #3b0764;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #ddd6fe; /* Medium Purple Hover */
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #6d28d9, #5b21b6);
+        border: none;
+        color: white;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #5b21b6, #4c1d95);
+    }
+    .input-group-text, .form-control, .form-select {
+        background-color: #ffffff;
+        border-color: #a78bfa;
+        color: #3b0764;
+    }
+    .form-control::placeholder {
+        color: #7c3aed;
+    }
+    h2 {
+        color: #4c1d95;
+    }
+</style>
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2 class="fw-bold">
-        🎓Students
+        🎓 Students
     </h2>
 
 {% if session.get("role") == "admin" %}
     <a href="/add_student" class="btn btn-primary">
-    <i class="bi bi-person-plus-fill"></i>
-    Add Student
+        <i class="bi bi-person-plus-fill"></i>
+        Add Student
     </a>
 {% endif %}
+
 </div>
 
 
-<!-- SEARCH -->
+<!-- SEARCH & FILTER -->
 
 <div class="card shadow p-3 mb-4">
 
-    <input 
-        type="text"
-        id="search"
-        class="form-control"
-        placeholder="Search student name..."
-    >
+    <div class="row g-2">
+
+        <!-- Search -->
+
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class ="input-group-text bg-white">
+                    <i class="bi bi-search"></i>
+                </span>
+            <input
+                type="text"
+                id="search"
+                class="form-control"
+                placeholder="Search student name..."
+            >
+            </div>
+
+        </div>
+
+
+        <!-- Course Filter -->
+
+        <div class="col-md-2">
+
+            <select
+                id="courseFilter"
+                class="form-select">
+
+                <option value="">
+                    All Courses
+                </option>
+
+                {% for s in students %}
+
+                    {% if s.course %}
+
+                    <option value="{{ s.course }}">
+                        {{ s.course }}
+                    </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- Batch Filter -->
+
+        <div class="col-md-2">
+
+            <select
+                id="batchFilter"
+                class="form-select">
+
+                <option value="">
+                    All Batches
+                </option>
+
+                {% for s in students %}
+
+                    {% if s.batch %}
+
+                    <option value="{{ s.batch }}">
+                        {{ s.batch }}
+                    </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- Status Filter -->
+
+        <div class="col-md-2">
+
+            <select
+                id="statusFilter"
+                class="form-select">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Reset -->
+
+        <div class="col-md-2">
+
+            <button
+                type="button"
+                id="resetFilter"
+                class="btn btn-outline-secondary w-100">
+
+                <i class="bi bi-arrow-clockwise"></i>
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -38,7 +192,9 @@
 
 <div class="table-responsive">
 
-<table class="table table-hover" id="studentTable">
+<table
+    class="table table-hover"
+    id="studentTable">
 
 <thead class="table-dark">
 
@@ -58,8 +214,9 @@
     <i class="bi bi-telephone-fill"></i>
     Mobile
 </th>
+
 <th>
-  <i class="bi bi-book-fill"></i>
+    <i class="bi bi-book-fill"></i>
     Course
 </th>
 
@@ -67,14 +224,16 @@
     <i class="bi bi-clock-fill"></i>
     Batch
 </th>
+
 <th>
     <i class="bi bi-check-circle-fill"></i>
     Status
 </th>
+
 <th>
     <i class="bi bi-gear-fill"></i>
-    Actions</th>
-
+    Actions
+</th>
 
 </tr>
 
@@ -87,18 +246,27 @@
 
 <tr>
 
-<td>{{ s.roll_no }}</td>
-
 <td>
-    {{ s.name}}
-    {{ s.father_name }}  {{s.surname}}
+    {{ s.roll_no }}
 </td>
 
-<td>{{ s.mobile }}</td>
+<td>
+    {{ s.name }}
+    {{ s.father_name }}
+    {{ s.surname }}
+</td>
 
-<td>{{ s.course }}</td>
+<td>
+    {{ s.mobile }}
+</td>
 
-<td>{{ s.batch }}</td>
+<td>
+    {{ s.course }}
+</td>
+
+<td>
+    {{ s.batch }}
+</td>
 
 
 <td>
@@ -106,13 +274,13 @@
 {% if s.status == "Active" %}
 
 <span class="badge bg-success">
-Active
+    Active
 </span>
 
 {% else %}
 
 <span class="badge bg-danger">
-Inactive
+    Inactive
 </span>
 
 {% endif %}
@@ -121,29 +289,60 @@ Inactive
 
 
 
-
 <td>
 
-    <a href="/view_student/{{ s.id }}" class="btn btn-info btn-sm">
+    <!-- View -->
+
+    <a
+        href="/view_student/{{ s.id }}"
+        class="btn btn-info btn-sm">
+
         <i class="bi bi-eye"></i>
+
     </a>
 
-   {% if session.get("role") == "admin" %}
-    <a href="/edit_student/{{ s.id }}" class="btn btn-warning btn-sm">
+
+    {% if session.get("role") == "admin" %}
+
+    <!-- Edit -->
+
+    <a
+        href="/edit_student/{{ s.id }}"
+        class="btn btn-warning btn-sm">
+
         <i class="bi bi-pencil"></i>
-    </a>
-   {% endif %}
-    <a href="/student_id_card/{{ s.id }}" class="btn btn-dark btn-sm">
-        <i class="bi bi-person-vcard"></i>
+
     </a>
 
-   {% if session.get("role") == "admin" %}
-    <a href="/delete_student/{{ s.id }}"
-       class="btn btn-danger btn-sm"
-       onclick="return confirm('Delete student?')">
-        <i class="bi bi-trash"></i>
-    </a>
     {% endif %}
+
+
+    <!-- ID Card -->
+
+    <a
+        href="/student_id_card/{{ s.id }}"
+        class="btn btn-dark btn-sm">
+
+        <i class="bi bi-person-vcard"></i>
+
+    </a>
+
+
+    {% if session.get("role") == "admin" %}
+
+    <!-- Delete -->
+
+    <a
+        href="/delete_student/{{ s.id }}"
+        class="btn btn-danger btn-sm"
+        onclick="return confirm('Delete student?')">
+
+        <i class="bi bi-trash"></i>
+
+    </a>
+
+    {% endif %}
+
 </td>
 
 
@@ -154,37 +353,158 @@ Inactive
 </tbody>
 
 </table>
+
 </div>
+
 </div>
 
 
+
+<!-- SEARCH & FILTER SCRIPT -->
 
 <script>
 
-document.getElementById("search").addEventListener("keyup",function(){
+const search =
+    document.getElementById("search");
 
-let value=this.value.toLowerCase();
+const courseFilter =
+    document.getElementById("courseFilter");
 
-let rows=document.querySelectorAll("#studentTable tbody tr");
+const batchFilter =
+    document.getElementById("batchFilter");
+
+const statusFilter =
+    document.getElementById("statusFilter");
+
+const resetFilter =
+    document.getElementById("resetFilter");
 
 
-rows.forEach(row=>{
+const rows =
+    document.querySelectorAll(
+        "#studentTable tbody tr"
+    );
 
-let name=row.cells[1].innerText.toLowerCase();
+
+function filterStudents() {
+
+    let searchValue =
+        search.value.toLowerCase().trim();
+
+    let courseValue =
+        courseFilter.value.toLowerCase();
+
+    let batchValue =
+        batchFilter.value.toLowerCase();
+
+    let statusValue =
+        statusFilter.value.toLowerCase();
 
 
-if(name.includes(value))
-{
-    row.style.display="";
+    rows.forEach(row => {
+
+        let name =
+            row.cells[1].innerText.toLowerCase();
+
+        let course =
+            row.cells[3].innerText.toLowerCase();
+
+        let batch =
+            row.cells[4].innerText.toLowerCase();
+
+        let status =
+            row.cells[5].innerText.toLowerCase();
+
+
+        let matchSearch =
+            name.includes(searchValue);
+
+
+        let matchCourse =
+            courseValue === "" ||
+            course === courseValue;
+
+
+        let matchBatch =
+            batchValue === "" ||
+            batch === batchValue;
+
+
+        let matchStatus =
+            statusValue === "" ||
+            status === statusValue;
+
+
+        if (
+            matchSearch &&
+            matchCourse &&
+            matchBatch &&
+            matchStatus
+        ) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
 }
-else
-{
-    row.style.display="none";
-}
 
-});
 
-});
+/* Search */
+
+search.addEventListener(
+    "input",
+    filterStudents
+);
+
+
+/* Course */
+
+courseFilter.addEventListener(
+    "change",
+    filterStudents
+);
+
+
+/* Batch */
+
+batchFilter.addEventListener(
+    "change",
+    filterStudents
+);
+
+
+/* Status */
+
+statusFilter.addEventListener(
+    "change",
+    filterStudents
+);
+
+
+/* Reset */
+
+resetFilter.addEventListener(
+    "click",
+    function() {
+
+        search.value = "";
+
+        courseFilter.value = "";
+
+        batchFilter.value = "";
+
+        statusFilter.value = "";
+
+        filterStudents();
+
+    }
+);
 
 </script>
 
