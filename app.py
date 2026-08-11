@@ -36,6 +36,13 @@ def home():
     return render_template("home.html")
 
 
+#=======notes========
+@app.route('/subject/<subject_name>')
+def subject_notes(subject_name):
+    return render_template(
+        'subject_notes.html',
+        subject_name=subject_name
+    )
 # ================= AI DATABASE ANALYSIS =================
 def ask_ai(question):
     conn = get_connection()
@@ -321,49 +328,125 @@ def dashboard():
 
 
 # ================= STUDENT LIST =================
-
+# ================= STUDENT LIST =================
 @app.route("/students")
 def students():
-    
-
-    search = request.args.get("search")
+    search = request.args.get("search", "")
+    course = request.args.get("course", "")
+    batch = request.args.get("batch", "")
+    status = request.args.get("status", "")
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+    offset = (page - 1) * per_page
     conn = get_connection()
+
+    # ================= BASE QUERY =================
+    query = """
+        SELECT *
+        FROM students
+        WHERE 1=1
+    """
+
+    count_query = """
+        SELECT COUNT(*)
+        FROM students
+        WHERE 1=1
+    """
+    params = []
+
+    # ================= SEARCH =================
     if search:
+        query += """
+            AND name LIKE ?
+        """
+        count_query += """
+            AND name LIKE ?
+        """
+        params.append("%" + search + "%")
 
-        students = conn.execute("""
-        SELECT *
-        FROM students
-        WHERE name LIKE ?
-        OR mobile LIKE ?
-        OR course LIKE ?
+    # ================= COURSE FILTER =================
+    if course:
+        query += """
+            AND course = ?
+        """
+        count_query += """
+            AND course = ?
+        """
+        params.append(course)
+
+    # ================= BATCH FILTER =================
+    if batch:
+        query += """
+            AND batch = ?
+        """
+        count_query += """
+            AND batch = ?
+        """
+        params.append(batch)
+
+    # ================= STATUS FILTER =================
+    if status:
+        query += """
+            AND status = ?
+        """
+        count_query += """
+            AND status = ?
+        """
+        params.append(status)
+
+    # ================= TOTAL STUDENTS =================
+    total = conn.execute(
+        count_query,
+        params
+    ).fetchone()[0]
+    # ================= PAGINATION =================
+    query += """
         ORDER BY id ASC
-        """,
-        (
-            "%"+search+"%",
-            "%"+search+"%",
-            "%"+search+"%"
-        )).fetchall()
+        LIMIT ? OFFSET ?
+    """
+    students = conn.execute(
+        query,
+        params + [per_page, offset]
+    ).fetchall()
 
+    # ================= UNIQUE COURSES =================
 
-    else:
-
-        students = conn.execute("""
-        SELECT *
+    courses = conn.execute("""
+        SELECT DISTINCT course
         FROM students
-        ORDER BY id ASC
-        """).fetchall()
+        WHERE course IS NOT NULL
+        AND course != ''
+        ORDER BY course
+    """).fetchall()
 
+    # ================= UNIQUE BATCHES =================
 
+    batches = conn.execute("""
+        SELECT DISTINCT batch
+        FROM students
+        WHERE batch IS NOT NULL
+        AND batch != ''
+        ORDER BY batch
+    """).fetchall()
 
     conn.close()
 
+    # ================= TOTAL PAGES =================
+
+    total_pages = (total + per_page - 1) // per_page
 
     return render_template(
         "students.html",
-        students=students
+        students=students,
+        courses=courses,
+        batches=batches,
+        search=search,
+        course=course,
+        batch=batch,
+        status=status,
+        page=page,
+        total_pages=total_pages
     )
-
-
 
 # ================= ADD STUDENT =================
 

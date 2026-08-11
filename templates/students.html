@@ -40,6 +40,37 @@
     h2 {
         color: #4c1d95;
     }
+/* ===== PROFESSIONAL PAGINATION ===== */
+
+.pagination .page-link {
+    color: #5b21b6;
+    background-color: #ede9fe;
+    border: 1px solid #a78bfa;
+    margin: 0 3px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.pagination .page-link:hover {
+    color: white;
+    background-color: #6d28d9;
+    border-color: #6d28d9;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    border-color: #5b21b6;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #a1a1aa;
+    background-color: #f5f3ff;
+    border-color: #ddd6fe;
+}
+
+
+
 </style>
 <div class="d-flex justify-content-between align-items-center mb-4">
 
@@ -57,133 +88,156 @@
 </div>
 
 
-<!-- SEARCH & FILTER -->
+<!-- SEARCH & FILTER --><form method="GET" action="{{ url_for('students') }}">
+<div class="card shadow p-3 mb-4"><div class="row g-2">
 
-<div class="card shadow p-3 mb-4">
+    <!-- Search -->
 
-    <div class="row g-2">
+    <div class="col-md-4">
 
-        <!-- Search -->
+        <div class="input-group">
 
-        <div class="col-md-4">
-            <div class="input-group">
-                <span class ="input-group-text bg-white">
-                    <i class="bi bi-search"></i>
-                </span>
+            <span class="input-group-text bg-white">
+                <i class="bi bi-search"></i>
+            </span>
+
             <input
                 type="text"
-                id="search"
+                name="search"
                 class="form-control"
                 placeholder="Search student name..."
+                value="{{ search }}"
             >
-            </div>
-
-        </div>
-
-
-        <!-- Course Filter -->
-
-        <div class="col-md-2">
-
-            <select
-                id="courseFilter"
-                class="form-select">
-
-                <option value="">
-                    All Courses
-                </option>
-
-                {% for s in students %}
-
-                    {% if s.course %}
-
-                    <option value="{{ s.course }}">
-                        {{ s.course }}
-                    </option>
-
-                    {% endif %}
-
-                {% endfor %}
-
-            </select>
-
-        </div>
-
-
-        <!-- Batch Filter -->
-
-        <div class="col-md-2">
-
-            <select
-                id="batchFilter"
-                class="form-select">
-
-                <option value="">
-                    All Batches
-                </option>
-
-                {% for s in students %}
-
-                    {% if s.batch %}
-
-                    <option value="{{ s.batch }}">
-                        {{ s.batch }}
-                    </option>
-
-                    {% endif %}
-
-                {% endfor %}
-
-            </select>
-
-        </div>
-
-
-        <!-- Status Filter -->
-
-        <div class="col-md-2">
-
-            <select
-                id="statusFilter"
-                class="form-select">
-
-                <option value="">
-                    All Status
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Inactive">
-                    Inactive
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <!-- Reset -->
-
-        <div class="col-md-2">
-
-            <button
-                type="button"
-                id="resetFilter"
-                class="btn btn-outline-secondary w-100">
-
-                <i class="bi bi-arrow-clockwise"></i>
-                Reset
-
-            </button>
 
         </div>
 
     </div>
 
+
+    <!-- Course Filter -->
+
+    <div class="col-md-2">
+
+        <select
+            name="course"
+            class="form-select">
+
+            <option value="">
+                All Courses
+            </option>
+
+            {% for c in courses %}
+
+                <option
+                    value="{{ c.course }}"
+                    {% if course == c.course %}selected{% endif %}>
+
+                    {{ c.course }}
+
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+    <!-- Batch Filter -->
+
+    <div class="col-md-2">
+
+        <select
+            name="batch"
+            class="form-select">
+
+            <option value="">
+                All Batches
+            </option>
+
+            {% for b in batches %}
+
+                <option
+                    value="{{ b.batch }}"
+                    {% if batch == b.batch %}selected{% endif %}>
+
+                    {{ b.batch }}
+
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+    <!-- Status Filter -->
+
+    <div class="col-md-2">
+
+        <select
+            name="status"
+            class="form-select">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option
+                value="Active"
+                {% if status == "Active" %}selected{% endif %}>
+
+                Active
+
+            </option>
+
+            <option
+                value="Inactive"
+                {% if status == "Inactive" %}selected{% endif %}>
+
+                Inactive
+
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Apply -->
+
+    <div class="col-md-1">
+
+        <button
+            type="submit"
+            class="btn btn-primary w-100">
+
+            <i class="bi bi-funnel-fill"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- Reset -->
+
+    <div class="col-md-1">
+
+        <a
+            href="{{ url_for('students') }}"
+            class="btn btn-outline-secondary w-100">
+
+            <i class="bi bi-arrow-clockwise"></i>
+
+        </a>
+
+    </div>
+
 </div>
 
+</div>
+</form>
 
 
 <!-- STUDENT TABLE -->
@@ -251,7 +305,7 @@
 </td>
 
 <td>
-    {{ s.name }}
+    {{ s.name }} 
     {{ s.father_name }}
     {{ s.surname }}
 </td>
@@ -358,155 +412,167 @@
 
 </div>
 
+<!-- PAGINATION -->
+{% if total_pages > 1 %}
+
+<nav class="mt-4"><ul class="pagination justify-content-center">
+
+    <!-- Previous -->
+
+    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+
+        <a
+            class="page-link"
+            href="{{ url_for(
+                'students',
+                page=page-1,
+                search=search,
+                course=course,
+                batch=batch,
+                status=status
+            ) }}">
+
+            <i class="bi bi-chevron-left"></i>
+            Previous
+
+        </a>
+
+    </li>
 
 
-<!-- SEARCH & FILTER SCRIPT -->
+    <!-- First Page -->
 
-<script>
+    <li class="page-item {% if page == 1 %}active{% endif %}">
 
-const search =
-    document.getElementById("search");
+        <a
+            class="page-link"
+            href="{{ url_for(
+                'students',
+                page=1,
+                search=search,
+                course=course,
+                batch=batch,
+                status=status
+            ) }}">
 
-const courseFilter =
-    document.getElementById("courseFilter");
+            1
 
-const batchFilter =
-    document.getElementById("batchFilter");
+        </a>
 
-const statusFilter =
-    document.getElementById("statusFilter");
-
-const resetFilter =
-    document.getElementById("resetFilter");
-
-
-const rows =
-    document.querySelectorAll(
-        "#studentTable tbody tr"
-    );
+    </li>
 
 
-function filterStudents() {
+    <!-- Dots -->
 
-    let searchValue =
-        search.value.toLowerCase().trim();
+    {% if page > 3 %}
 
-    let courseValue =
-        courseFilter.value.toLowerCase();
+    <li class="page-item disabled">
 
-    let batchValue =
-        batchFilter.value.toLowerCase();
+        <span class="page-link">
+            ...
+        </span>
 
-    let statusValue =
-        statusFilter.value.toLowerCase();
+    </li>
 
-
-    rows.forEach(row => {
-
-        let name =
-            row.cells[1].innerText.toLowerCase();
-
-        let course =
-            row.cells[3].innerText.toLowerCase();
-
-        let batch =
-            row.cells[4].innerText.toLowerCase();
-
-        let status =
-            row.cells[5].innerText.toLowerCase();
+    {% endif %}
 
 
-        let matchSearch =
-            name.includes(searchValue);
+    <!-- Middle Pages -->
+
+    {% for p in range(2, total_pages) %}
+
+        {% if p >= page - 1 and p <= page + 1 %}
+
+        <li class="page-item {% if p == page %}active{% endif %}">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                    'students',
+                    page=p,
+                    search=search,
+                    course=course,
+                    batch=batch,
+                    status=status
+                ) }}">
+
+                {{ p }}
+
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    {% endfor %}
 
 
-        let matchCourse =
-            courseValue === "" ||
-            course === courseValue;
+    <!-- Dots Before Last -->
+
+    {% if page < total_pages - 2 %}
+
+    <li class="page-item disabled">
+
+        <span class="page-link">
+            ...
+        </span>
+
+    </li>
+
+    {% endif %}
 
 
-        let matchBatch =
-            batchValue === "" ||
-            batch === batchValue;
+    <!-- Last Page -->
+
+    {% if total_pages > 1 %}
+
+    <li class="page-item {% if page == total_pages %}active{% endif %}">
+
+        <a
+            class="page-link"
+            href="{{ url_for(
+                'students',
+                page=total_pages,
+                search=search,
+                course=course,
+                batch=batch,
+                status=status
+            ) }}">
+
+            {{ total_pages }}
+
+        </a>
+
+    </li>
+
+    {% endif %}
 
 
-        let matchStatus =
-            statusValue === "" ||
-            status === statusValue;
+    <!-- Next -->
 
+    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
 
-        if (
-            matchSearch &&
-            matchCourse &&
-            matchBatch &&
-            matchStatus
-        ) {
+        <a
+            class="page-link"
+            href="{{ url_for(
+                'students',
+                page=page+1,
+                search=search,
+                course=course,
+                batch=batch,
+                status=status
+            ) }}">
 
-            row.style.display = "";
+            Next
+            <i class="bi bi-chevron-right"></i>
 
-        } else {
+        </a>
 
-            row.style.display = "none";
+    </li>
 
-        }
+</ul>
 
-    });
-
-}
-
-
-/* Search */
-
-search.addEventListener(
-    "input",
-    filterStudents
-);
-
-
-/* Course */
-
-courseFilter.addEventListener(
-    "change",
-    filterStudents
-);
-
-
-/* Batch */
-
-batchFilter.addEventListener(
-    "change",
-    filterStudents
-);
-
-
-/* Status */
-
-statusFilter.addEventListener(
-    "change",
-    filterStudents
-);
-
-
-/* Reset */
-
-resetFilter.addEventListener(
-    "click",
-    function() {
-
-        search.value = "";
-
-        courseFilter.value = "";
-
-        batchFilter.value = "";
-
-        statusFilter.value = "";
-
-        filterStudents();
-
-    }
-);
-
-</script>
-
+</nav>
+{% endif %}
 
 {% endblock %}

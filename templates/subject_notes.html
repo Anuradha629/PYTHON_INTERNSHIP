@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1>📚 {{ subject_name }}</h1>
+        <p class="text-muted">
+            Study Material & Notes
+        </p>
+    </div>
+
+    <div class="card shadow-sm p-4 text-center">
+
+        <h4>📘 {{ subject_name }} Notes</h4>
+
+        <p class="text-muted">
+            Complete study material for this subject
+        </p>
+
+        {%if subject_name=="C++ Programming"%}
+        <a href="{{ url_for('static', 
+        filename='notes/CPP_Programming_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+        {% elif subject_name=="C Programming"%}
+        <a href="{{ url_for('static', 
+        filename='notes/C_Programming_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+
+        {%elif subject_name=="Database Management System"%}
+        <a href="{{ url_for('static', 
+        filename='notes/DBMS_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+
+        {%elif subject_name=="Java Programming"%}
+        <a href="{{ url_for('static', 
+        filename='notes/Java_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+        {%elif subject_name=="Python Programming"%}
+        <a href="{{ url_for('static', 
+        filename='notes/Python_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+
+         {%elif subject_name=="Data Communication and Networking"%}
+        <a href="{{ url_for('static', 
+        filename='notes/DCN_Notes.pdf') }}"
+            target="_blank"
+            class="btn btn-primary">
+                📄 View Notes
+        </a>
+        {% endif %}
+
+
+
+
+    </div>
+
+</div>
+
+{% endblock %}
