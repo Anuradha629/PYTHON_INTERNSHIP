@@ -16,111 +16,14 @@ rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
 rel="stylesheet">
 
-
-<style>
-body{
-    background:#f4f7fb;
-    transition:0.3s;
-}
-
-/* Dark Mode */
-.dark-mode{
-    background:#121212;
-    color:white;
-}
-
-.dark-mode .card{
-    background:#1e1e1e;
-    color:white;
-}
-
-.dark-mode .table{
-    color:white;
-}
-
-.dark-mode .form-control{
-    background:#222;
-    color:white;
-    border-color:#555;
-}
-.dark-mode .form-control::placeholder{
-    color:#aaa;
-}
-</style>
-
-
-<!---------------about animation---------------------->
-<style>
-/* ===== PAGE ANIMATION ===== */
-body {
-    animation: pageFade 0.5s ease;
-}
-
-@keyframes pageFade {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== CARD HOVER ===== */
-.card {
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
-}
-
-/* ===== BUTTON HOVER ===== */
-.btn {
-    transition: all 0.25s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-/* ===== NAVBAR LINKS ===== */
-.nav-link {
-    transition: all 0.25s ease;
-}
-
-.nav-link:hover {
-    transform: translateY(-2px);
-}
-
-/* ===== TABLE ROW ===== */
-.table tbody tr {
-    transition: all 0.2s ease;
-}
-
-.table tbody tr:hover {
-    transform: scale(1.01);
-}
-
-/* ===== ICON ===== */
-.feature-icon {
-    transition: transform 0.3s ease;
-}
-
-.card:hover .feature-icon {
-    transform: scale(1.12) rotate(3deg);
-}
-</style>
-
-<!------------------------------------->
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 <!-- ================= NAVBAR ================= -->
-<nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top"
-style="background-color:#0b1f3a;">
+<nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top">
 <div class="container-fluid">
 <a class="navbar-brand fw-bold fs-4"
 href="/">
@@ -272,6 +175,14 @@ onclick="darkMode()">
 </div>
 
 <!-- Dark Mode Script -->
+ <div class="background-animation">
+    <span class="bubble bubble1"></span>
+    <span class="bubble bubble2"></span>
+    <span class="bubble bubble3"></span>
+    <span class="bubble bubble4"></span>
+    <span class="bubble bubble5"></span>
+    <span class="bubble bubble6"></span>
+</div>
 
 <script>
 

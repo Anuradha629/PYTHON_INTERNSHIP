@@ -1211,49 +1211,111 @@ def logout():
     return redirect("/login")
 
 
-#==========Performance=======
+# ================= PERFORMANCE PAGE =================
+
 @app.route("/performance")
 def performance():
 
-    conn=get_connection()
-    cursor=conn.cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
+
     cursor.execute("""
-    SELECT 
-    performance.*,
-    students.name,
-    students.course
-    FROM performance
-    JOIN students
-    ON performance.student_id = students.id
+        SELECT
+            performance.*,
+            students.name,
+            students.course,
+            students.roll_no
+        FROM performance
+        JOIN students
+        ON performance.student_id = students.id
     """)
-    data=cursor.fetchall()
+
+    data = cursor.fetchall()
+
     conn.close()
+
     return render_template(
         "performance.html",
         performance=data
     )
 
-#======marks according Performance=======
 
-@app.route("/add_performance", methods=["GET","POST"])
+# ================= ADD PERFORMANCE =================
+
+@app.route("/add_performance", methods=["GET", "POST"])
 def add_performance():
-    if session.get("role") != "admin":
-        flash("Admins only! You do not have permission.", "danger")
-        return redirect("/performance")
 
     conn = get_connection()
     cursor = conn.cursor()
 
-
     if request.method == "POST":
 
-        student_id = request.form["student_id"]
+        student_id = request.form.get("student_id")
+        marks = request.form.get("marks")
 
-        marks = int(request.form["marks"])
+        # Student validation
+        if not student_id:
 
+            conn.close()
+
+            flash(
+                "Please select a student.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("add_performance")
+            )
+
+        # Marks validation
+        if not marks:
+
+            conn.close()
+
+            flash(
+                "Please enter marks.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("add_performance")
+            )
+
+        try:
+
+            marks = float(marks)
+
+        except ValueError:
+
+            conn.close()
+
+            flash(
+                "Please enter valid marks.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("add_performance")
+            )
+
+        # Marks range validation
+        if marks < 0 or marks > 100:
+
+            conn.close()
+
+            flash(
+                "Marks must be between 0 and 100.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("add_performance")
+            )
+
+        # ================= AUTOMATIC REMARK =================
 
         if marks >= 90:
-            remark = "Excellent"
+            remark = "Excellent!"
 
         elif marks >= 75:
             remark = "Very Good"
@@ -1261,21 +1323,52 @@ def add_performance():
         elif marks >= 60:
             remark = "Good"
 
-        else:
+        elif marks >= 40:
             remark = "Needs Improvement"
 
+        else:
+            remark = " Work harder and improve !"
 
+        # ================= SAVE =================
 
-        cursor.execute(" INSERT INTO performance (student_id, marks, remark) VALUES (?,?,?) ",
-        ( student_id, marks, remark ))
+        cursor.execute("""
+            INSERT INTO performance
+            (student_id, marks, remark)
+            VALUES (?, ?, ?)
+        """, (
+            student_id,
+            marks,
+            remark
+        ))
+
         conn.commit()
         conn.close()
-        return redirect(url_for("performance"))
 
-    cursor.execute("SELECT id,name,course FROM students")
+        flash(
+            "Performance added successfully!",
+            "success"
+        )
+
+        return redirect(
+            url_for("performance")
+        )
+
+    # ================= GET =================
+
+    cursor.execute("""
+        SELECT
+            id,
+            name,
+            roll_no,
+            course
+        FROM students
+        ORDER BY name
+    """)
 
     students = cursor.fetchall()
+
     conn.close()
+
     return render_template(
         "add_performance.html",
         students=students

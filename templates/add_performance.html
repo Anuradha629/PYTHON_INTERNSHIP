@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -10,32 +11,51 @@
             📊 Add Student Performance
         </h2>
 
-
         <form method="POST">
 
+            <!-- ================= STUDENT NAME ================= -->
 
-            <div class="mb-3">
+            <div class="mb-3 position-relative">
 
                 <label class="form-label">
-                    Select Student
+                    Student Name
                 </label>
 
+                <input
+                    type="text"
+                    id="studentName"
+                    class="form-control"
+                    placeholder="Enter student name"
+                    autocomplete="off"
+                    required
+                >
 
-                <select name="student_id" class="form-control">
+                <!-- Actual student ID sent to Flask -->
+                <input
+                    type="hidden"
+                    name="student_id"
+                    id="studentId"
+                >
 
-                    {% for s in students %}
-
-                    <option value="{{s.id}}">
-                        {{s.name}} - {{s.course}}
-                    </option>
-
-                    {% endfor %}
-
-                </select>
+                <!-- Student suggestions -->
+                <div
+                    id="studentList"
+                    class="list-group position-absolute w-100"
+                    style="z-index: 1000;"
+                ></div>
 
             </div>
 
 
+            <!-- ================= SELECTED STUDENT ================= -->
+
+            <div
+                id="selectedStudent"
+                class="alert alert-info d-none"
+            ></div>
+
+
+            <!-- ================= MARKS ================= -->
 
             <div class="mb-3">
 
@@ -43,29 +63,328 @@
                     Marks
                 </label>
 
-                <input 
-                type="number"
-                name="marks"
-                class="form-control"
-                placeholder="Enter Marks">
+                <input
+                    type="number"
+                    name="marks"
+                    id="marks"
+                    class="form-control"
+                    placeholder="Enter marks"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    required
+                    oninput="showRemark()"
+                >
 
             </div>
 
 
+            <!-- ================= REMARK ================= -->
 
-            <button class="btn btn-primary">
+            <div class="mb-3">
 
-                💾 Save Performance
+                <label class="form-label">
+                    Remark
+                </label>
 
+                <input
+                    type="text"
+                    id="remark"
+                    class="form-control"
+                    placeholder="Remark will appear automatically"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- ================= BUTTONS ================= -->
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                <i class="bi bi-check-circle"></i>
+                Add Performance
             </button>
 
+            <a
+                href="{{ url_for('performance') }}"
+                class="btn btn-secondary"
+            >
+                Cancel
+            </a>
 
         </form>
 
+
+        <!-- ================= STUDENT DATA ================= -->
+
+        <div style="display: none;">
+
+            {% for student in students %}
+
+            <div
+                class="student-data"
+                data-id="{{ student.id }}"
+                data-name="{{ student.name }}"
+                data-roll="{{ student.roll_no }}"
+                data-course="{{ student.course }}"
+            ></div>
+
+            {% endfor %}
+
+        </div>
 
     </div>
 
 </div>
 
+
+<script>
+
+/* ==========================================
+   GET ELEMENTS
+   ========================================== */
+
+const studentName =
+    document.getElementById("studentName");
+
+const studentId =
+    document.getElementById("studentId");
+
+const studentList =
+    document.getElementById("studentList");
+
+const selectedStudent =
+    document.getElementById("selectedStudent");
+
+
+/* ==========================================
+   STUDENT NAME INPUT
+   ========================================== */
+
+studentName.addEventListener("input", function () {
+
+    const value =
+        this.value.trim().toLowerCase();
+
+    // Clear old suggestions
+    studentList.innerHTML = "";
+
+    // Clear selected student
+    studentId.value = "";
+
+    selectedStudent.classList.add("d-none");
+
+
+    // Nothing typed
+    if (value === "") {
+        return;
+    }
+
+
+    // Get all students
+    const students =
+        document.querySelectorAll(".student-data");
+
+
+    let found = false;
+
+
+    students.forEach(function (student) {
+
+        const name =
+            student.dataset.name.toLowerCase();
+
+
+        // Match typed name
+        if (name.includes(value)) {
+
+            found = true;
+
+
+            const item =
+                document.createElement("button");
+
+            item.type = "button";
+
+            item.className =
+                "list-group-item list-group-item-action";
+
+
+            item.innerHTML = `
+                <strong>
+                    ${student.dataset.name}
+                </strong>
+
+                <br>
+
+                <small>
+                    Roll No: ${student.dataset.roll}
+                    &nbsp; | &nbsp;
+                    Course: ${student.dataset.course}
+                </small>
+            `;
+
+
+            /* ==========================
+               SELECT STUDENT
+               ========================== */
+
+            item.addEventListener(
+                "click",
+                function () {
+
+                    // Set student name
+                    studentName.value =
+                        student.dataset.name;
+
+
+                    // Set actual student ID
+                    studentId.value =
+                        student.dataset.id;
+
+
+                    // Hide suggestions
+                    studentList.innerHTML = "";
+
+
+                    // Show selected student
+                    selectedStudent.innerHTML = `
+                        <strong>
+                            Selected Student:
+                        </strong>
+
+                        ${student.dataset.name}
+
+                        <br>
+
+                        Roll No:
+                        ${student.dataset.roll}
+
+                        <br>
+
+                        Course:
+                        ${student.dataset.course}
+                    `;
+
+
+                    selectedStudent.classList.remove(
+                        "d-none"
+                    );
+
+                }
+            );
+
+
+            studentList.appendChild(item);
+
+        }
+
+    });
+
+
+    /* ==========================
+       NO STUDENT FOUND
+       ========================== */
+
+    if (!found) {
+
+        const noStudent =
+            document.createElement("div");
+
+        noStudent.className =
+            "list-group-item text-danger";
+
+        noStudent.innerText =
+            "No student found.";
+
+        studentList.appendChild(noStudent);
+
+    }
+
+});
+
+
+/* ==========================================
+   AUTOMATIC REMARK
+   ========================================== */
+
+function showRemark() {
+
+    const marks =
+        parseFloat(
+            document.getElementById("marks").value
+        );
+
+
+    let remark = "";
+
+
+    if (isNaN(marks)) {
+
+        remark = "";
+
+    }
+
+    else if (marks >= 90) {
+
+        remark = "Excellent";
+
+    }
+
+    else if (marks >= 75) {
+
+        remark = "Very Good";
+
+    }
+
+    else if (marks >= 60) {
+
+        remark = "Good";
+
+    }
+
+    else if (marks >= 40) {
+
+        remark = "Needs Improvement";
+
+    }
+
+    else {
+
+        remark = "Work harder and improve!";
+
+    }
+
+
+    document.getElementById("remark").value =
+        remark;
+
+}
+
+
+/* ==========================================
+   CLOSE SUGGESTIONS WHEN CLICKING OUTSIDE
+   ========================================== */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            !studentName.contains(event.target) &&
+            !studentList.contains(event.target)
+        ) {
+
+            studentList.innerHTML = "";
+
+        }
+
+    }
+);
+
+</script>
 
 {% endblock %}
