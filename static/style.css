@@ -675,3 +675,52 @@ footer {
         height: 90px;
     }
 }
+/* =====================================================
+   FOOTER - SAME LOOK AS NAVBAR
+   ===================================================== */
+
+.footer {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+
+    /* EXACT SAME TRANSPARENT BACKGROUND AS NAVBAR */
+    background: rgba(255, 255, 255, 0.18) !important;
+
+    /* EXACT SAME GLASS BLUR */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    /* Footer Border */
+    border-top: 1px solid rgba(255, 255, 255, 0.30);
+
+    /* Same Glow / Shadow Feel */
+    box-shadow:
+        0 -6px 25px rgba(255, 255, 255, 0.12);
+
+    color: white;
+
+    text-align: center;
+
+    padding: 22px 10px;
+
+    margin-top: 40px;
+
+    box-sizing: border-box;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Footer Text */
+
+.footer p {
+    margin: 0;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+

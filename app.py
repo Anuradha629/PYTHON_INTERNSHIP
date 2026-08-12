@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, flash, url_for,sess
 from datetime import date
 import sqlite3
 
+from functools import wraps
+from flask import session
+
 from db import get_connection, init_db
 from groq import Groq
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -29,11 +32,28 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+
+#====== student login ======
+
+def login_required(view_function):
+    @wraps(view_function)
+    def wrapped_view(*args, **kwargs):
+
+        if "user_id" not in session:
+            flash("Please login first!", "warning")
+            return redirect(url_for("login"))
+
+        return view_function(*args, **kwargs)
+
+    return wrapped_view
 # ================= HOME =================
 
 @app.route("/")
 def home():
     return render_template("home.html")
+
+
 
 
 #=======notes========
@@ -327,7 +347,6 @@ def dashboard():
 
 
 
-# ================= STUDENT LIST =================
 # ================= STUDENT LIST =================
 @app.route("/students")
 def students():
@@ -821,6 +840,8 @@ def delete_teacher(id):
 # ================= FEES MODULE =================
 
 @app.route("/fees")
+@login_required
+
 def fees():
     conn = get_connection()
     fees = conn.execute("""
@@ -986,7 +1007,10 @@ def fee_receipt(id):
 
 
 # -------- ATTENDANCE LIST + ADD --------
+
 @app.route("/attendance", methods=["GET","POST"])
+@login_required
+
 def attendance():
     conn = get_connection()
     # All Students
