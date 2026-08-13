@@ -214,6 +214,8 @@ If a Course is not in the database, say: "This Course is not available in Bright
 10. You can provide suggestions for coaching management, but clearly separate suggestions from actual database information.
 If the question is about a course in our database, answer it normally using your knowledge. 
 Don't say the information is unavailable.
+11. If student marks are available in the database, provide simple and practical tips to improve their marks based on their performance.
+12. Do not invent marks or performance details. Use only the marks provided by the application.
 """
             },
 
