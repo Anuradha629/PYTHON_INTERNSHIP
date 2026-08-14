@@ -24,15 +24,46 @@
 <form method="POST">
 
 
-
 <label class="fw-bold">
-Student Name
+    Search Student
 </label>
 
+<input
+    type="text"
+    id="studentSearch"
+    class="form-control mb-2"
+    placeholder="Search by name or roll number..."
+    autocomplete="off"
+>
 
-<select name="student_id" 
-class="form-control mb-3"
-required>
+<label class="fw-bold">
+    Student Name
+</label>
+
+<select
+    name="student_id"
+    id="studentSelect"
+    class="form-control mb-3"
+    required
+>
+
+    <option value="">
+        Select Student
+    </option>
+
+    {% for s in students %}
+
+    <option
+        value="{{ s.id }}"
+        data-search="{{ s.roll_no }} {{ s.name|lower }}"
+    >
+        {{ s.roll_no }} - {{ s.name }}
+    </option>
+
+    {% endfor %}
+
+</select>
+
 
 
 <option value="">
@@ -121,6 +152,37 @@ Save Fee
 
 
 </div>
+<script>
 
+const searchInput = document.getElementById("studentSearch");
+const studentSelect = document.getElementById("studentSelect");
+
+searchInput.addEventListener("input", function () {
+
+    const searchValue = this.value.toLowerCase().trim();
+
+    const options = studentSelect.querySelectorAll("option");
+
+    options.forEach(function (option, index) {
+
+        if (index === 0) {
+            option.style.display = "";
+            return;
+        }
+
+        const searchText =
+            option.getAttribute("data-search").toLowerCase();
+
+        if (searchText.includes(searchValue)) {
+            option.style.display = "";
+        } else {
+            option.style.display = "none";
+        }
+
+    });
+
+});
+
+</script>
 
 {% endblock %}

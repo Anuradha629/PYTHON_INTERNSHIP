@@ -918,34 +918,85 @@ def fees():
     )  
 
 # -------- COLLECT FEE --------
-@app.route("/collect_fee", methods=["GET","POST"])
+# -------- COLLECT FEE --------
+@app.route("/collect_fee", methods=["GET", "POST"])
 def collect_fee():
+
     if session.get("role") != "admin":
         flash("Admins only! You do not have permission.", "danger")
         return redirect("/fees")
 
     conn = get_connection()
-    students = conn.execute("SELECT * FROM students ORDER BY name").fetchall()
-    if request.method=="POST":
-        student_id = request.form["student_id"]
-        total_fee = request.form["total_fee"]
-        paid_fee = request.form["paid_fee"]
-        payment_date = request.form["date"]
-        
-       #Generate unique receipt number
-        last_id = conn.execute("SELECT IFNULL(MAX(id), 0) FROM fees").fetchone()[0]
 
-        receipt_no = f"BFCC-2026-{last_id+1:04d}"
+    # Only students who do NOT have a fee record yet
+    students = conn.execute("""
+        SELECT *
+        FROM students
+        WHERE id NOT IN (
+            SELECT student_id
+            FROM fees
+        )
+        ORDER BY name
+    """).fetchall()
+
+    if request.method == "POST":
+
+        student_id = request.form["student_id"]
+        total_fee = int(request.form["total_fee"])
+        paid_fee = int(request.form["paid_fee"])
+        payment_date = request.form["date"]
+
+        # Check again before inserting
+        existing_fee = conn.execute("""
+            SELECT id
+            FROM fees
+            WHERE student_id = ?
+        """, (student_id,)).fetchone()
+
+        if existing_fee:
+            conn.close()
+
+            flash(
+                "Fee record already exists for this student. Please use Edit Fee for installments.",
+                "warning"
+            )
+
+            return redirect("/fees")
+
+        # Validate payment
+        if paid_fee <= 0:
+            conn.close()
+            flash("Paid amount must be greater than 0.", "danger")
+            return redirect("/collect_fee")
+
+        if paid_fee > total_fee:
+            conn.close()
+            flash("Paid amount cannot be greater than total fee.", "danger")
+            return redirect("/collect_fee")
+
+        # Generate unique receipt number
+        last_id = conn.execute(
+            "SELECT IFNULL(MAX(id), 0) FROM fees"
+        ).fetchone()[0]
+
+        receipt_no = f"BFCC-2026-{last_id + 1:04d}"
+
         conn.execute("""
-        INSERT INTO fees ( receipt_no, student_id, total_fee, paid_fee, date )
-        VALUES(?,?,?,?,?)
-        """,
-        (
-        receipt_no,
-        student_id,
-        total_fee,
-        paid_fee,
-        payment_date
+            INSERT INTO fees
+            (
+                receipt_no,
+                student_id,
+                total_fee,
+                paid_fee,
+                date
+            )
+            VALUES (?, ?, ?, ?, ?)
+        """, (
+            receipt_no,
+            student_id,
+            total_fee,
+            paid_fee,
+            payment_date
         ))
 
         conn.commit()
@@ -955,6 +1006,7 @@ def collect_fee():
             "Fee Collected Successfully",
             "success"
         )
+
         return redirect("/fees")
 
     conn.close()
@@ -967,35 +1019,76 @@ def collect_fee():
 
 @app.route("/edit_fee/<int:id>", methods=["GET", "POST"])
 def edit_fee(id):
+
     if session.get("role") != "admin":
         flash("Admins only! You do not have permission.", "danger")
         return redirect("/fees")
+
     conn = get_connection()
-    fee = conn.execute("SELECT * FROM fees WHERE id=?", (id,)).fetchone()
+
+    fee = conn.execute("""
+        SELECT
+            fees.*,
+            students.name,
+            students.roll_no,
+            students.course
+        FROM fees
+        INNER JOIN students
+        ON fees.student_id = students.id
+        WHERE fees.id = ?
+    """, (id,)).fetchone()
+
+    if not fee:
+        conn.close()
+        flash("Fee record not found.", "danger")
+        return redirect("/fees")
+
     if request.method == "POST":
+
+        total_fee = int(request.form["total_fee"])
+        paid_fee = int(request.form["paid_fee"])
+        payment_date = request.form["date"]
+
+        if paid_fee < 0:
+            conn.close()
+            flash("Paid amount cannot be negative.", "danger")
+            return redirect(f"/edit_fee/{id}")
+
+        if paid_fee > total_fee:
+            conn.close()
+            flash("Paid amount cannot be greater than total fee.", "danger")
+            return redirect(f"/edit_fee/{id}")
+
         conn.execute("""
-        UPDATE fees
-        SET
-            total_fee=?,
-            paid_fee=?,
-            date=?
-        WHERE id=?
-        """,
-        (
-            request.form["total_fee"],
-            request.form["paid_fee"],
-            request.form["date"],
+            UPDATE fees
+            SET
+                total_fee = ?,
+                paid_fee = ?,
+                date = ?
+            WHERE id = ?
+        """, (
+            total_fee,
+            paid_fee,
+            payment_date,
             id
         ))
 
         conn.commit()
         conn.close()
 
-        flash("Fee Updated Successfully", "success")
+        flash(
+            "Fee Updated Successfully",
+            "success"
+        )
+
         return redirect("/fees")
 
     conn.close()
-    return render_template("edit_fee.html", fee=fee)
+
+    return render_template(
+        "edit_fee.html",
+        fee=fee
+    )
 
 
 # -------- FEE RECEIPT --------
