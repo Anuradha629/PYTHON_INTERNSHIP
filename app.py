@@ -840,58 +840,82 @@ def delete_teacher(id):
     return redirect("/teachers")
 
 # ================= FEES MODULE =================
-
-@app.route("/fees")
-@login_required
-
-def fees():
-    conn = get_connection()
-    fees = conn.execute("""
-    SELECT
-    fees.id,
-    fees.receipt_no,
-    students.roll_no,
-    students.name,
-    fees.total_fee,
-    fees.paid_fee,
-    fees.date
-
-    FROM fees
-    INNER JOIN students
-    ON fees.student_id = students.id
-    ORDER BY fees.id ASC
-
-    """).fetchall()
-
-
-
-    total_collection = conn.execute("""
-    SELECT IFNULL(SUM(paid_fee),0)
-    FROM fees
-    """).fetchone()[0]
-
-
-
-    total_students = conn.execute("""
-    SELECT COUNT(*)
-    FROM students
-    """).fetchone()[0]
-
-
-
-    pending_fee = conn.execute("""
-    SELECT IFNULL(SUM(total_fee-paid_fee),0)
-    FROM fees
-    """).fetchone()[0]
-    conn.close()
-    return render_template(
-        "fees.html",
-        fees=fees,
-        total_collection=total_collection,
-        total_students=total_students,
-        pending_fee=pending_fee,
-       
-    )
+@app.route("/fees") 
+@login_required 
+ 
+def fees(): 
+    conn = get_connection() 
+ 
+    page = request.args.get("page", 1, type=int) 
+    per_page = 5 
+    offset = (page - 1) * per_page 
+ 
+    fees = conn.execute(""" 
+    SELECT  
+    fees.id,  
+    fees.receipt_no,  
+    students.roll_no,  
+    students.name,  
+    fees.total_fee,  
+    fees.paid_fee,  
+    fees.date  
+ 
+    FROM fees  
+    INNER JOIN students  
+    ON fees.student_id = students.id  
+    ORDER BY fees.id ASC 
+    LIMIT ? OFFSET ? 
+ 
+    """, (per_page, offset)).fetchall() 
+ 
+ 
+    total_records = conn.execute(""" 
+        SELECT COUNT(*) 
+        FROM fees 
+    """).fetchone()[0] 
+ 
+    total_pages = (total_records + per_page - 1) // per_page 
+ 
+ 
+    # =============================== 
+    # TOTAL COLLECTION 
+    # =============================== 
+ 
+    total_collection = conn.execute(""" 
+        SELECT IFNULL(SUM(paid_fee),0) 
+        FROM fees 
+    """).fetchone()[0] 
+ 
+ 
+    # =============================== 
+    # TOTAL STUDENTS 
+    # =============================== 
+ 
+    total_students = conn.execute(""" 
+        SELECT COUNT(*) 
+        FROM students 
+    """).fetchone()[0] 
+ 
+ 
+    # PENDING FEES 
+    pending_fee = conn.execute(""" 
+        SELECT IFNULL(SUM(total_fee-paid_fee),0) 
+        FROM fees 
+    """).fetchone()[0] 
+ 
+ 
+    conn.close() 
+ 
+ 
+    return render_template( 
+        "fees.html", 
+        fees=fees, 
+        total_collection=total_collection, 
+        total_students=total_students, 
+        pending_fee=pending_fee, 
+        page=page, 
+        total_pages=total_pages 
+    )  
 
 # -------- COLLECT FEE --------
 @app.route("/collect_fee", methods=["GET","POST"])
