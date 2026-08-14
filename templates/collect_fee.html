@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2 class="fw-bold">
         <i class="bi bi-wallet2"></i>
         Collect Student Fee
     </h2>
-
 
     <a href="/fees" class="btn btn-secondary">
         Back
@@ -15,168 +16,170 @@
 </div>
 
 
-
-
-
 <div class="card shadow p-4">
-
 
 <form method="POST">
 
 
-<label class="fw-bold">
-    Search Student
-</label>
+   <!-- Search Student -->
 
-<input
-    type="text"
-    id="studentSearch"
-    class="form-control mb-2"
-    placeholder="Search by name or roll number..."
-    autocomplete="off"
->
+        <div class="mb-3">
 
-<label class="fw-bold">
-    Student Name
-</label>
+            <label class="fw-bold mb-2">
+                Search Student
+            </label>
 
-<select
-    name="student_id"
-    id="studentSelect"
-    class="form-control mb-3"
-    required
->
+            <input
+                type="text"
+                id="studentSearch"
+                class="form-control"
+                placeholder="Search by name or roll number..."
+                autocomplete="off"
+            >
 
-    <option value="">
-        Select Student
-    </option>
+        </div>
 
-    {% for s in students %}
 
-    <option
-        value="{{ s.id }}"
-        data-search="{{ s.roll_no }} {{ s.name|lower }}"
+        <!-- Select Student -->
+
+        <div class="mb-3">
+
+            <label class="fw-bold mb-2">
+                Select Student
+            </label>
+
+            <select
+                name="student_id"
+                id="studentSelect"
+                class="form-control"
+                required
+            >
+
+                <option value="">
+                    Select Student
+                </option>
+
+                {% for s in students %}
+
+                <option
+                    value="{{ s.id }}"
+                    data-search="{{ s.roll_no }} {{ s.name|lower }}"
+                >
+                    {{ s.roll_no }} - {{ s.name }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    <!-- TOTAL FEE -->
+
+    <label class="fw-bold">
+        Total Fee
+    </label>
+
+    <input
+        type="number"
+        name="total_fee"
+        class="form-control mb-3"
+        placeholder="Enter Total Course Fee"
+        required
     >
-        {{ s.roll_no }} - {{ s.name }}
-    </option>
-
-    {% endfor %}
-
-</select>
 
 
+    <!-- PAID AMOUNT -->
 
-<option value="">
-Select Student
-</option>
+    <label class="fw-bold">
+        Paid Amount
+    </label>
 
-
-{% for s in students %}
-
-
-<option value="{{ s.id }}">
-
-{{ s.roll_no }} - {{ s.name }}
-
-</option>
-
-
-{% endfor %}
+    <input
+        type="number"
+        name="paid_fee"
+        class="form-control mb-3"
+        placeholder="Enter Paid Amount"
+        required
+    >
 
 
-</select>
+    <!-- PAYMENT DATE -->
+
+    <label class="fw-bold">
+        Payment Date
+    </label>
+
+    <input
+        type="date"
+        name="date"
+        class="form-control mb-3"
+        required
+    >
 
 
+    <!-- SAVE -->
 
+    <button
+        type="submit"
+        class="btn btn-success w-100"
+    >
 
+        <i class="bi bi-check-circle"></i>
+        Save Fee
 
-<label class="fw-bold">
-Total Fee
-</label>
-
-
-<input 
-type="number"
-name="total_fee"
-class="form-control mb-3"
-placeholder="Enter Total Course Fee"
-required
->
-
-
-
-
-
-<label class="fw-bold">
-Paid Amount
-</label>
-
-
-<input 
-type="number"
-name="paid_fee"
-class="form-control mb-3"
-placeholder="Enter Paid Amount"
-required
->
-
-
-
-
-
-<label class="fw-bold">
-Payment Date
-</label>
-
-
-<input 
-type="date"
-name="date"
-class="form-control mb-3"
-required
->
-
-
-
-
-<button class="btn btn-success w-100">
-
-<i class="bi bi-check-circle"></i>
-
-Save Fee
-
-</button>
+    </button>
 
 
 </form>
 
-
 </div>
+
+
+<!-- SEARCH SCRIPT -->
+
 <script>
 
-const searchInput = document.getElementById("studentSearch");
-const studentSelect = document.getElementById("studentSelect");
+const searchInput =
+    document.getElementById("studentSearch");
+
+const studentSelect =
+    document.getElementById("studentSelect");
+
+const allStudents = Array.from(
+    studentSelect.querySelectorAll("option")
+).slice(1);
+
 
 searchInput.addEventListener("input", function () {
 
-    const searchValue = this.value.toLowerCase().trim();
+    const searchValue =
+        this.value.toLowerCase().trim();
 
-    const options = studentSelect.querySelectorAll("option");
+    studentSelect.innerHTML = "";
 
-    options.forEach(function (option, index) {
+    const defaultOption =
+        document.createElement("option");
 
-        if (index === 0) {
-            option.style.display = "";
-            return;
-        }
+    defaultOption.value = "";
+    defaultOption.textContent =
+        "Select Student";
+
+    studentSelect.appendChild(defaultOption);
+
+
+    allStudents.forEach(function(option) {
 
         const searchText =
-            option.getAttribute("data-search").toLowerCase();
+            option.getAttribute("data-search")
+                   .toLowerCase();
 
         if (searchText.includes(searchValue)) {
-            option.style.display = "";
-        } else {
-            option.style.display = "none";
+
+            studentSelect.appendChild(
+                option.cloneNode(true)
+            );
+
         }
 
     });
@@ -184,5 +187,6 @@ searchInput.addEventListener("input", function () {
 });
 
 </script>
+
 
 {% endblock %}

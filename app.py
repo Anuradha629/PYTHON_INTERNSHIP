@@ -917,7 +917,7 @@ def fees():
         total_pages=total_pages 
     )  
 
-# -------- COLLECT FEE --------
+
 # -------- COLLECT FEE --------
 @app.route("/collect_fee", methods=["GET", "POST"])
 def collect_fee():
