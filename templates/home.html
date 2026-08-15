@@ -2,80 +2,163 @@
 
 {% block content %}
 
-<div class="container mt-1">
+<div class="container mt-3 mb-5">
 
-<!-- ================= SMALL PROFESSIONAL HERO SECTION ================= -->
+<!-- ================= PROFESSIONAL HERO SECTION ================= -->
 
 <div class="card border-0 shadow-lg rounded-4 overflow-hidden"
-     style="background:linear-gradient(120deg,#071a3d,#0d3b78,#1769aa);">
+     style="
+     background:linear-gradient(120deg,#071a3d,#0d3b78,#1769aa);
+     min-height:320px;
+     ">
 
-<div class="row align-items-center g-0">
+    <div class="row align-items-center g-0">
 
-    <!-- LEFT SIDE -->
+        <!-- LEFT SIDE -->
+        <div class="col-lg-7 p-4 p-lg-5 text-white">
 
-    <div class="col-lg-8 p-3 text-white">
+            <h1 class="fw-bold mb-3"
+                style="font-size:40px;">
+                Bright Future Coaching Classes
+            </h1>
 
-        <!--<span class="badge rounded-pill px-3 py-2 mb-2"
-              style="background:rgba(255,255,255,0.13);">
+            <h5 class="mb-3">
+                Learn Today, Lead Tomorrow
+            </h5>
 
-            <i class="bi bi-mortarboard-fill me-2"></i>
-            QUALITY EDUCATION WITH PRACTICAL LEARNING
+            <p class="mb-4 text-light fs-6">
+                Quality education with practical learning,
+                experienced teachers and personal guidance.
+            </p>
 
-        </span>-->
-        <h1 class="fw-bold mb-2"
-            style="font-size:36px;">
-            Bright Future Coaching Classes
-        </h1>
+            <div>
+
+                <a href="/students"
+                   class="btn btn-warning fw-bold me-2 px-4 py-2">
+                    <i class="bi bi-people-fill me-1"></i>
+                    Students
+                </a>
+
+                <a href="/teachers"
+                   class="btn btn-outline-light fw-bold px-4 py-2">
+                    <i class="bi bi-person-video3 me-1"></i>
+                    Teachers
+                </a>
+
+            </div>
+
+        </div>
 
 
-        <h5 class="mb-2">
-            Learn Today, Lead Tomorrow
-        </h5>
+        <!-- RIGHT SIDE : CLASSROOM IMAGE -->
 
-        <p class="mb-3 text-light">
-            Quality education with practical learning,
-            experienced teachers and personal guidance.
+        <div class="col-lg-5 p-3">
+
+            <div class="rounded-4 overflow-hidden shadow-lg"
+                 style="
+                 height:290px;
+                 border:1px solid rgba(255,255,255,0.25);
+                 ">
+
+                <img src="{{ url_for('static', filename='images/classroom.png') }}"
+                     alt="Bright Future Coaching Classes"
+                     class="w-100 h-100"
+                     style="
+                     object-fit:cover;
+                     object-position:center;
+                     ">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= INSTITUTE PROFILE ================ -->
+
+<div class="card border-0 shadow-lg rounded-4 mt-4"
+     style="
+     background:rgba(255,255,255,0.10);
+     backdrop-filter:blur(12px);
+     -webkit-backdrop-filter:blur(12px);
+     ">
+
+    <div class="card-body p-4 p-lg-5 text-white">
+
+        <h2 class="fw-bold mb-4">
+            🏫 About Our Institute
+        </h2>
+
+        <p class="fs-5">
+            Bright Future Coaching Classes provides quality education
+            with experienced teachers, regular tests, practical learning
+            and personal guidance.
         </p>
 
 
-        <div>
-            <a href="/students"
-               class="btn btn-warning fw-bold me-2">
-                <i class="bi bi-people-fill me-1"></i>
-                Students
-            </a>
+        <div class="row mt-4 g-4">
+
+             <!--LEFT SIDE -->
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <h5 class="fw-bold">
+                        📍 Location
+                    </h5>
+
+                    <p class="mb-0">
+                        Digras, District Hingoli, Maharashtra
+                    </p>
+
+                </div>
 
 
-            <a href="/teachers"
-               class="btn btn-outline-light fw-bold">
+                <div>
 
-                <i class="bi bi-person-video3 me-1"></i>
-                Teachers
+                    <h5 class="fw-bold">
+                        🏠 Address
+                    </h5>
 
-            </a>
+                    <p class="mb-0">
+                        Near Bus Stand, Main Road, Digras
+                    </p>
 
-        </div>
+                </div>
 
-    </div>
+            </div>
 
 
-    <!-- RIGHT SIDE -->
+            <!-- RIGHT -->
+            <div class="col-md-6">
 
-    <div class="col-lg-4 text-center text-white p-2">
+                <div class="mb-3">
 
-        <div class="bg-white bg-opacity-10 rounded-circle
-                    d-inline-flex align-items-center
-                    justify-content-center shadow"
-             style="width:160px;height:160px;">
+                    <h5 class="fw-bold">
+                        📞 Contact
+                    </h5>
 
-            <div class="bg-white bg-opacity-10 rounded-circle
-                        d-flex align-items-center
-                        justify-content-center"
-                 style="width:115px;height:115px;">
+                    <p class="mb-0">
+                        +91 9876543210
+                    </p>
 
-                <i class="bi bi-mortarboard-fill text-warning"
-                   style="font-size:55px;">
-                </i>
+                </div>
+
+
+                <div>
+
+                    <h5 class="fw-bold">
+                        📧 Email
+                    </h5>
+
+                    <p class="mb-0">
+                        brightfuture@gmail.com
+                    </p>
+
+                </div>
 
             </div>
 
@@ -85,271 +168,244 @@
 
 </div>
 
-
-</div>
-
-<!-- ================= INSTITUTE PROFILE ================= -->
-
-<div class="container mb-5">
-
-<div class="card shadow-lg border-0 rounded-4">
-
-<div class="card-body p-5">
-
-<h2 class="fw-bold text-primary mb-4">
-🏫 About Our Institute
-</h2>
-
-<p class="fs-5">
-
-Bright Future Coaching Classes provides quality education with experienced teachers,
-regular tests, practical learning and personal guidance.
-
-</p>
-
-<div class="row mt-4">
-
-<div class="col-md-6">
-
-<h5>📍 Location</h5>
-
-<p>
-Digras, District Hingoli, Maharashtra
-</p>
-
-<h5>🏠 Address</h5>
-
-<p>
-Near Bus Stand, Main Road, Digras
-</p>
-
-</div>
-
-<div class="col-md-6">
-
-<h5>📞 Contact</h5>
-
-<p>
-+91 9876543210
-</p>
-
-<h5>📧 Email</h5>
-
-<p>
-brightfuture@gmail.com
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
 
 <!-- ================= COURSES OFFERED ================= -->
 
-<div class="container my-5">
+<div class="mt-5">
 
+    <div class="text-center mb-4">
 
-<div class="text-center mb-5">
+        <h2 class="fw-bold text-white">
+            📚 Courses Offered
+        </h2>
 
-    <h2 class="fw-bold text-primary">
-        📚 Courses Offered
-    </h2>
-
-</div>
-
-
-<div class="row g-4">
-
-
-    <!-- Java -->
-
-    <div class="col-lg-4 col-md-6">
-
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
-
-            <div class="card-body p-4">
-
-                <div class="display-3 text-warning">
-                    ☕
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    Java Programming
-                </h4>
-
-                <p class="text-muted">
-                    Core Java, OOP Concepts & Application Development
-                </p>
-                <a href="{{ url_for('subject_notes', 
-                subject_name='Java Programming') }}"
-                    class="btn btn-primary btn-sm mt-2">
-                    📄View Notes
-                </a>
-
-            </div>
-
-        </div>
+        <p class="text-light">
+            Build strong programming and technical skills
+        </p>
 
     </div>
 
 
-    <!-- Python -->
-
-    <div class="col-lg-4 col-md-6">
-
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
-
-            <div class="card-body p-4">
-
-                <div class="display-3 text-primary">
-                    🐍
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    Python Programming
-                </h4>
-
-                <p class="text-muted">
-                    Python, Flask and Real-Time Projects
-                </p>
-                 <a href="{{ url_for('subject_notes', 
-                    subject_name='Python Programming') }}"
-                    class="btn btn-primary btn-sm mt-2">
-                    📄View Notes
-                </a>
+    <div class="row g-4">
 
 
-            </div>
+        <!-- JAVA -->
 
-        </div>
+        <div class="col-lg-4 col-md-6">
 
-    </div>
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
 
+                <div class="card-body p-4 text-white">
 
-    <!-- C -->
+                    <div class="display-3">
+                        ☕
+                    </div>
 
-    <div class="col-lg-4 col-md-6">
+                    <h4 class="fw-bold mt-3">
+                        Java Programming
+                    </h4>
 
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
+                    <p class="text-light">
+                        Core Java, OOP Concepts & Application Development
+                    </p>
 
-            <div class="card-body p-4">
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='Java Programming') }}"
+                       class="btn btn-primary btn-sm mt-2">
 
-                <div class="display-3 text-dark">
-                    💻
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    C Programming
-                </h4>
-
-                <p class="text-muted">
-                    Logic Building & Programming Fundamentals
-                </p>
-                <a href="{{ url_for('subject_notes', 
-                subject_name='C Programming') }}"
-                class="btn btn-primary btn-sm mt-2">
-                    📄 View Notes
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- C++ -->
-
-    <div class="col-lg-4 col-md-6">
-
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
-
-            <div class="card-body p-4">
-
-                <div class="display-3 text-secondary">
-                    ⚙️
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    C++ Programming
-                </h4>
-
-                <p class="text-muted">
-                    Object-Oriented Programming & STL Basics
-                </p>
-                <a href="{{ url_for('subject_notes', 
-                subject_name='C++ Programming') }}"
-                    class="btn btn-primary btn-sm mt-2">
-                    📄 View Notes
-                </a>
-   
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- DBMS -->
-
-    <div class="col-lg-4 col-md-6">
-
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
-
-            <div class="card-body p-4">
-
-                <div class="display-3 text-success">
-                    🗄️
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    Database Management System
-                </h4>
-
-                <p class="text-muted">
-                    SQL, Database Design & Data Management
-                </p>
-                <a href="{{ url_for('subject_notes', 
-                subject_name='Database Management System') }}"
-                    class="btn btn-primary btn-sm mt-2">
-                    📄 View Notes
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- DCN -->
-
-    <div class="col-lg-4 col-md-6">
-
-        <div class="card shadow-lg border-0 rounded-4 h-100 text-center">
-
-            <div class="card-body p-4">
-
-                <div class="display-3 text-info">
-                    🌐
-                </div>
-
-                <h4 class="fw-bold mt-3">
-                    Data Communication & Networking
-                </h4>
-
-                <p class="text-muted">
-                    Computer Networks, Protocols & Communication
-                </p>
-                <a href="{{ url_for('subject_notes', 
-                 subject_name='Data Communication and Networking') }}"
-                    class="btn btn-primary btn-sm mt-2">
                         📄 View Notes
-                </a>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PYTHON -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body p-4 text-white">
+
+                    <div class="display-3">
+                        🐍
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Python Programming
+                    </h4>
+
+                    <p class="text-light">
+                        Python, Flask and Real-Time Projects
+                    </p>
+
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='Python Programming') }}"
+                       class="btn btn-primary btn-sm mt-2">
+
+                        📄 View Notes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- C -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body p-4 text-white">
+
+                    <div class="display-3">
+                        💻
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        C Programming
+                    </h4>
+
+                    <p class="text-light">
+                        Logic Building & Programming Fundamentals
+                    </p>
+
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='C Programming') }}"
+                       class="btn btn-primary btn-sm mt-2">
+
+                        📄 View Notes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- C++ -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body p-4 text-white">
+
+                    <div class="display-3">
+                        ⚙️
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        C++ Programming
+                    </h4>
+
+                    <p class="text-light">
+                        Object-Oriented Programming & STL Basics
+                    </p>
+
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='C++ Programming') }}"
+                       class="btn btn-primary btn-sm mt-2">
+
+                        📄 View Notes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DBMS -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body p-4 text-white">
+
+                    <div class="display-3">
+                        🗄️
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Database Management System
+                    </h4>
+
+                    <p class="text-light">
+                        SQL, Database Design & Data Management
+                    </p>
+
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='Database Management System') }}"
+                       class="btn btn-primary btn-sm mt-2">
+
+                        📄 View Notes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DCN -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100 text-center"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body p-4 text-white">
+
+                    <div class="display-3">
+                        🌐
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Data Communication & Networking
+                    </h4>
+
+                    <p class="text-light">
+                        Computer Networks, Protocols & Communication
+                    </p>
+
+                    <a href="{{ url_for('subject_notes',
+                    subject_name='Data Communication and Networking') }}"
+                       class="btn btn-primary btn-sm mt-2">
+
+                        📄 View Notes
+
+                    </a>
+
+                </div>
+
             </div>
 
         </div>
@@ -357,137 +413,179 @@ brightfuture@gmail.com
     </div>
 
 </div>
-</div>
+
 
 <!-- ================= WHY CHOOSE US ================= -->
 
-<div class="container my-5">
-<h2 class="text-center fw-bold text-primary mb-5">
-    ⭐ Why Choose Bright Future Coaching?
-</h2>
+<div class="mt-5">
+
+    <h2 class="text-center fw-bold text-white mb-4">
+        ⭐ Why Choose Bright Future Coaching?
+    </h2>
 
 
-<div class="row g-4">
+    <div class="row g-4">
 
 
-    <!-- Expert Faculty -->
+        <!-- EXPERT FACULTY -->
 
-    <div class="col-lg-3 col-md-6">
-        <div class="card h-100 border-0 shadow rounded-4 border-top border-primary border-4">
-            <div class="card-body text-center p-4">
-                <div class="mx-auto mb-3 rounded-circle bg-primary text-white
-                d-flex align-items-center justify-content-center"
-                style="width:80px;height:80px;font-size:40px;">
-                    👨‍🏫
-                </div>
+        <div class="col-lg-3 col-md-6">
 
+            <div class="card h-100 border-0 shadow-lg rounded-4"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
 
-                <h4 class="fw-bold">
-                    Expert Faculty
-                </h4>
+                <div class="card-body text-center p-4 text-white">
 
-                <p class="text-muted">
-                    Experienced teachers with strong subject knowledge,
-                    personal guidance and doubt solving sessions.
-                </p>
+                    <div class="mx-auto mb-3 rounded-circle
+                                bg-primary text-white
+                                d-flex align-items-center justify-content-center"
+                         style="width:80px;height:80px;font-size:40px;">
 
+                        👨‍🏫
 
-                <span class="badge bg-primary rounded-pill px-3 py-2">
-                    Personal Mentorship
-                </span>
-            </div>
-        </div>
-    </div>
+                    </div>
 
+                    <h4 class="fw-bold">
+                        Expert Faculty
+                    </h4>
 
-    <!-- Smart Learning -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card h-100 border-0 shadow rounded-4 border-top border-success border-4">
-            <div class="card-body text-center p-4">
-                <div class="mx-auto mb-3 rounded-circle bg-success text-white
-                d-flex align-items-center justify-content-center"
-                style="width:80px;height:80px;font-size:40px;">
-                    📚
-                </div>
+                    <p class="text-light">
+                        Experienced teachers with strong subject knowledge,
+                        personal guidance and doubt solving sessions.
+                    </p>
 
-
-                <h4 class="fw-bold">
-                    Smart Learning
-                </h4>
-
-
-                <p class="text-muted">
-                    Well planned courses with concepts,
-                    practice sessions and regular learning support.
-                </p>
-
-
-                <span class="badge bg-success rounded-pill px-3 py-2">
-                    Quality Education
-                </span>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Practical Training -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card h-100 border-0 shadow rounded-4 border-top border-warning border-4">
-            <div class="card-body text-center p-4">
-                <div class="mx-auto mb-3 rounded-circle bg-warning text-dark
-                d-flex align-items-center justify-content-center"
-                style="width:80px;height:80px;font-size:40px;">
-                    💻
-                </div>
-
-                <h4 class="fw-bold">
-                    Practical Training
-                </h4>
-
-                <p class="text-muted">
-
-                    Hands-on coding, assignments and
-                    real project development experience.
-                </p>
-
-                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
-                    Career Skills
-                </span>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Student Progress -->
-
-    <div class="col-lg-3 col-md-6">
-        <div class="card h-100 border-0 shadow rounded-4 border-top border-danger border-4">
-            <div class="card-body text-center p-4">
-                <div class="mx-auto mb-3 rounded-circle bg-danger text-white
-                d-flex align-items-center justify-content-center"
-                style="width:80px;height:80px;font-size:40px;">
-                    📊
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+                        Personal Mentorship
+                    </span>
 
                 </div>
 
-                <h4 class="fw-bold">
-                    Student Progress
-                </h4>
-
-                <p class="text-muted">
-                    Marks analysis and
-                    performance tracking system.
-                </p>
-
-
-                <span class="badge bg-danger rounded-pill px-3 py-2">
-                    Regular Assessment
-                </span>
             </div>
+
         </div>
+
+
+        <!-- SMART LEARNING -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card h-100 border-0 shadow-lg rounded-4"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body text-center p-4 text-white">
+
+                    <div class="mx-auto mb-3 rounded-circle
+                                bg-success text-white
+                                d-flex align-items-center justify-content-center"
+                         style="width:80px;height:80px;font-size:40px;">
+
+                        📚
+
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Smart Learning
+                    </h4>
+
+                    <p class="text-light">
+                        Well planned courses with concepts,
+                        practice sessions and regular learning support.
+                    </p>
+
+                    <span class="badge bg-success rounded-pill px-3 py-2">
+                        Quality Education
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRACTICAL TRAINING -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card h-100 border-0 shadow-lg rounded-4"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body text-center p-4 text-white">
+
+                    <div class="mx-auto mb-3 rounded-circle
+                                bg-warning text-dark
+                                d-flex align-items-center justify-content-center"
+                         style="width:80px;height:80px;font-size:40px;">
+
+                        💻
+
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Practical Training
+                    </h4>
+
+                    <p class="text-light">
+                        Hands-on coding, assignments and
+                        real project development experience.
+                    </p>
+
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                        Career Skills
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STUDENT PROGRESS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card h-100 border-0 shadow-lg rounded-4"
+                 style="background:rgba(255,255,255,0.12);
+                        backdrop-filter:blur(10px);">
+
+                <div class="card-body text-center p-4 text-white">
+
+                    <div class="mx-auto mb-3 rounded-circle
+                                bg-danger text-white
+                                d-flex align-items-center justify-content-center"
+                         style="width:80px;height:80px;font-size:40px;">
+
+                        📊
+
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Student Progress
+                    </h4>
+
+                    <p class="text-light">
+                        Marks analysis and
+                        performance tracking system.
+                    </p>
+
+                    <span class="badge bg-danger rounded-pill px-3 py-2">
+                        Regular Assessment
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
-</div>
+
 </div>
 
 {% endblock %}

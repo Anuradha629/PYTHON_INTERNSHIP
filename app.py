@@ -284,6 +284,14 @@ def dashboard():
     """).fetchone()[0]
 
     pending_fee = total_fee - paid_fee
+
+    # ===== Fee Progress Percentage =====
+    paid_percentage = 0
+    pending_percentage = 0
+
+    if total_fee > 0:
+        paid_percentage = round((paid_fee / total_fee) * 100, 1)
+        pending_percentage = round((pending_fee / total_fee) * 100, 1)
   
     attendance = conn.execute("""
     SELECT COUNT(*)
@@ -340,6 +348,8 @@ def dashboard():
         paid_fee=paid_fee,
         total_fee=total_fee,
         pending_fee=pending_fee,
+        paid_percentage=paid_percentage,
+        pending_percentage=pending_percentage,
         attendance=attendance,
         top_students=top_students,  
         today_present=today_present,
