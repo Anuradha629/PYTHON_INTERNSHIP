@@ -723,3 +723,54 @@ footer {
 
     font-weight: 500;
 }
+
+
+/* =========================================
+   MOON CLICK - SOFT BLUE GLOW
+   ========================================= */
+
+body {
+    transition: background 0.9s ease;
+}
+
+/* Moon click केल्यानंतर */
+body.soft-blue-mode {
+    background:
+        radial-gradient(
+            circle at 75% 18%,
+            rgba(255, 255, 255, 0.30),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #3038a0,
+            #5666c9,
+            #3948aa
+        ) !important;
+
+    animation: softBlueGlow 1.2s ease;
+}
+
+/* Glow animation */
+@keyframes softBlueGlow {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.12);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+/* Moon icon animation */
+.theme-toggle {
+    transition: transform 0.6s ease;
+}
+
+.theme-toggle.active {
+    transform: rotate(180deg);
+}
