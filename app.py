@@ -367,7 +367,7 @@ def students():
     batch = request.args.get("batch", "")
     status = request.args.get("status", "")
     page = request.args.get("page", 1, type=int)
-    per_page = 10
+    per_page = 7
     offset = (page - 1) * per_page
     conn = get_connection()
 
