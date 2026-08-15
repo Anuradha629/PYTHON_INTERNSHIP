@@ -2,8 +2,9 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="card shadow-lg">
+
         <div class="card-header bg-success text-white">
             <h3>
                 <i class="bi bi-receipt"></i>
@@ -12,7 +13,9 @@
         </div>
 
         <div class="card-body">
+
             <div class="text-center mb-4">
+
                 <h4 class="fw-bold">
                     Bright Future Coaching Classes
                 </h4>
@@ -23,50 +26,53 @@
 
             </div>
 
-            <table class="table table-bordered"> 
+
+            <table class="table table-bordered border-dark">
+
                 <tr>
-                    <th>Receipt No</th>
-                    <td>                      
-                        {{ receipt.receipt_no }}                      
+                    <th class="bg-white text-dark">Receipt No</th>
+                    <td>
+                        {{ receipt.receipt_no }}
                     </td>
                 </tr>
 
                 <tr>
-                    <th>Roll Number</th>
+                    <th class="bg-white text-dark">Roll Number</th>
                     <td>{{ receipt.roll_no }}</td>
                 </tr>
 
                 <tr>
-                    <th>Student Name</th>
+                    <th class="bg-white text-dark">Student Name</th>
                     <td>{{ receipt.name }}</td>
                 </tr>
 
                 <tr>
-                    <th>Course</th>
+                    <th class="bg-white text-dark">Course</th>
                     <td>{{ receipt.course }}</td>
                 </tr>
 
                 <tr>
-                    <th>Total Fee</th>
+                    <th class="bg-white text-dark">Total Fee</th>
                     <td>₹ {{ receipt.total_fee }}</td>
                 </tr>
 
                 <tr>
-                    <th>Paid Fee</th>
+                    <th class="bg-white text-dark">Paid Fee</th>
                     <td>₹ {{ receipt.paid_fee }}</td>
                 </tr>
 
                 <tr>
-                    <th>Pending Fee</th>
+                    <th class="bg-white text-dark">Pending Fee</th>
                     <td>₹ {{ receipt.pending_fee }}</td>
                 </tr>
 
                 <tr>
-                    <th>Payment Date</th>
+                    <th class="bg-white text-dark">Payment Date</th>
                     <td>{{ receipt.date }}</td>
                 </tr>
 
             </table>
+
 
             <div class="mt-4 text-center">
 
@@ -85,9 +91,13 @@
 
                     <i class="bi bi-arrow-left"></i>
                     Back
+
                 </a>
+
             </div>
+
         </div>
+
     </div>
 </div>
 
