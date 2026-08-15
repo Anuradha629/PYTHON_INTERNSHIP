@@ -4,499 +4,563 @@
 <style>
     /* ===== THODA DARK PURPLE THEME ===== */
     body {
-        background-color: #c4b5fd; /* Medium Light Purple Background */
+        background-color: #c4b5fd;
     }
+
     .card {
-        background-color: #ede9fe; /* Light Purple Card */
+        background-color: #ede9fe;
         border: 1px solid #a78bfa;
-        color: #3b0764; /* Darker Purple Text */
+        color: #3b0764;
     }
+
     .table-dark {
-        background-color: #5b21b6 !important; /* Dark Purple Header */
+        background-color: #5b21b6 !important;
         color: #fff;
     }
+
     .table-hover tbody tr {
         color: #3b0764;
     }
+
     .table-hover tbody tr:hover {
-        background-color: #ddd6fe; /* Medium Purple Hover */
+        background-color: #ddd6fe;
     }
+
     .btn-primary {
         background: linear-gradient(135deg, #6d28d9, #5b21b6);
         border: none;
         color: white;
     }
+
     .btn-primary:hover {
         background: linear-gradient(135deg, #5b21b6, #4c1d95);
     }
-    .input-group-text, .form-control, .form-select {
+
+    .input-group-text,
+    .form-control,
+    .form-select {
         background-color: #ffffff;
         border-color: #a78bfa;
         color: #3b0764;
     }
+
     .form-control::placeholder {
         color: #7c3aed;
     }
+
     h2 {
         color: #4c1d95;
     }
-/* ===== PROFESSIONAL PAGINATION ===== */
 
-.pagination .page-link {
-    color: #5b21b6;
-    background-color: #ede9fe;
-    border: 1px solid #a78bfa;
-    margin: 0 3px;
-    border-radius: 8px;
-    font-weight: 600;
-}
+    /* ===== PROFESSIONAL PAGINATION ===== */
 
-.pagination .page-link:hover {
-    color: white;
-    background-color: #6d28d9;
-    border-color: #6d28d9;
-}
+    .pagination .page-link {
+        color: #5b21b6;
+        background-color: #ede9fe;
+        border: 1px solid #a78bfa;
+        margin: 0 3px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
 
-.pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #6d28d9, #5b21b6);
-    border-color: #5b21b6;
-    color: white;
-}
+    .pagination .page-link:hover {
+        color: white;
+        background-color: #6d28d9;
+        border-color: #6d28d9;
+    }
 
-.pagination .page-item.disabled .page-link {
-    color: #a1a1aa;
-    background-color: #f5f3ff;
-    border-color: #ddd6fe;
-}
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #6d28d9, #5b21b6);
+        border-color: #5b21b6;
+        color: white;
+    }
 
-
-
+    .pagination .page-item.disabled .page-link {
+        color: #a1a1aa;
+        background-color: #f5f3ff;
+        border-color: #ddd6fe;
+    }
 </style>
+
+
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2 class="fw-bold">
         🎓 Students
     </h2>
 
-{% if session.get("role") == "admin" %}
+    {% if session.get("role") == "admin" %}
     <a href="/add_student" class="btn btn-primary">
         <i class="bi bi-person-plus-fill"></i>
         Add Student
     </a>
-{% endif %}
+    {% endif %}
 
 </div>
 
 
-<!-- SEARCH & FILTER --><form method="GET" action="{{ url_for('students') }}">
-<div class="card shadow p-3 mb-4"><div class="row g-2">
+<!-- ================= SEARCH & FILTER ================= -->
 
-    <!-- Search -->
+<form method="GET" action="{{ url_for('students') }}">
 
-    <div class="col-md-4">
+    <div class="card shadow p-3 mb-4">
 
-        <div class="input-group">
+        <div class="row g-2">
 
-            <span class="input-group-text bg-white">
-                <i class="bi bi-search"></i>
-            </span>
+            <!-- Search -->
 
-            <input
-                type="text"
-                name="search"
-                class="form-control"
-                placeholder="Search student name..."
-                value="{{ search }}"
-            >
+            <div class="col-md-4">
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search student name..."
+                        value="{{ search }}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Course Filter -->
+
+            <div class="col-md-2">
+
+                <select
+                    name="course"
+                    class="form-select">
+
+                    <option value="">
+                        All Courses
+                    </option>
+
+                    {% for c in courses %}
+
+                    <option
+                        value="{{ c.course }}"
+                        {% if course == c.course %}selected{% endif %}>
+
+                        {{ c.course }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Batch Filter -->
+
+            <div class="col-md-2">
+
+                <select
+                    name="batch"
+                    class="form-select">
+
+                    <option value="">
+                        All Batches
+                    </option>
+
+                    {% for b in batches %}
+
+                    <option
+                        value="{{ b.batch }}"
+                        {% if batch == b.batch %}selected{% endif %}>
+
+                        {{ b.batch }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Status Filter -->
+
+            <div class="col-md-2">
+
+                <select
+                    name="status"
+                    class="form-select">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option
+                        value="Active"
+                        {% if status == "Active" %}selected{% endif %}>
+
+                        Active
+
+                    </option>
+
+                    <option
+                        value="Inactive"
+                        {% if status == "Inactive" %}selected{% endif %}>
+
+                        Inactive
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Apply Filter -->
+
+            <div class="col-md-1">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100">
+
+                    <i class="bi bi-search me-1"></i>
+                    Filter
+
+                </button>
+
+            </div>
+
+
+            <!-- Reset -->
+
+            <div class="col-md-1">
+
+                <a
+                    href="{{ url_for('students') }}"
+                    class="btn btn-outline-secondary w-100">
+
+                    <i class="bi bi-arrow-clockwise"></i>
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
-
-    <!-- Course Filter -->
-
-    <div class="col-md-2">
-
-        <select
-            name="course"
-            class="form-select">
-
-            <option value="">
-                All Courses
-            </option>
-
-            {% for c in courses %}
-
-                <option
-                    value="{{ c.course }}"
-                    {% if course == c.course %}selected{% endif %}>
-
-                    {{ c.course }}
-
-                </option>
-
-            {% endfor %}
-
-        </select>
-
-    </div>
-
-
-    <!-- Batch Filter -->
-
-    <div class="col-md-2">
-
-        <select
-            name="batch"
-            class="form-select">
-
-            <option value="">
-                All Batches
-            </option>
-
-            {% for b in batches %}
-
-                <option
-                    value="{{ b.batch }}"
-                    {% if batch == b.batch %}selected{% endif %}>
-
-                    {{ b.batch }}
-
-                </option>
-
-            {% endfor %}
-
-        </select>
-
-    </div>
-
-
-    <!-- Status Filter -->
-
-    <div class="col-md-2">
-
-        <select
-            name="status"
-            class="form-select">
-
-            <option value="">
-                All Status
-            </option>
-
-            <option
-                value="Active"
-                {% if status == "Active" %}selected{% endif %}>
-
-                Active
-
-            </option>
-
-            <option
-                value="Inactive"
-                {% if status == "Inactive" %}selected{% endif %}>
-
-                Inactive
-
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <!-- Apply -->
-
-    <div class="col-md-1">
-
-        <button
-            type="submit"
-            class="btn btn-primary w-100">
-
-            <i class="bi bi-funnel-fill"></i>
-
-        </button>
-
-    </div>
-
-
-    <!-- Reset -->
-
-    <div class="col-md-1">
-
-        <a
-            href="{{ url_for('students') }}"
-            class="btn btn-outline-secondary w-100">
-
-            <i class="bi bi-arrow-clockwise"></i>
-
-        </a>
-
-    </div>
-
-</div>
-
-</div>
 </form>
 
 
-<!-- STUDENT TABLE -->
+<!-- ================= STUDENT TABLE ================= -->
 
 <div class="card shadow p-3">
 
-<div class="table-responsive">
+    <div class="table-responsive">
 
-<table
-    class="table table-hover"
-    id="studentTable">
+        <table
+            class="table table-hover"
+            id="studentTable">
 
-<thead class="table-dark">
+            <thead class="table-dark">
 
-<tr>
+                <tr>
 
-<th>
-    <i class="bi bi-hash"></i>
-    Roll No
-</th>
+                    <th>
+                        <i class="bi bi-hash"></i>
+                        Roll No
+                    </th>
 
-<th>
-    <i class="bi bi-person-fill"></i>
-    Full Name
-</th>
+                    <th>
+                        <i class="bi bi-person-fill"></i>
+                        Full Name
+                    </th>
 
-<th>
-    <i class="bi bi-telephone-fill"></i>
-    Mobile
-</th>
+                    <th>
+                        <i class="bi bi-telephone-fill"></i>
+                        Mobile
+                    </th>
 
-<th>
-    <i class="bi bi-book-fill"></i>
-    Course
-</th>
+                    <th>
+                        <i class="bi bi-book-fill"></i>
+                        Course
+                    </th>
 
-<th>
-    <i class="bi bi-clock-fill"></i>
-    Batch
-</th>
+                    <th>
+                        <i class="bi bi-clock-fill"></i>
+                        Batch
+                    </th>
 
-<th>
-    <i class="bi bi-check-circle-fill"></i>
-    Status
-</th>
+                    <th>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Status
+                    </th>
 
-<th>
-    <i class="bi bi-gear-fill"></i>
-    Actions
-</th>
+                    <th>
+                        <i class="bi bi-gear-fill"></i>
+                        Actions
+                    </th>
 
-</tr>
+                </tr>
 
-</thead>
-
-
-<tbody>
-
-{% for s in students %}
-
-<tr>
-
-<td>
-    {{ s.roll_no }}
-</td>
-
-<td>
-    {{ s.name }} 
-    {{ s.father_name }}
-    {{ s.surname }}
-</td>
-
-<td>
-    {{ s.mobile }}
-</td>
-
-<td>
-    {{ s.course }}
-</td>
-
-<td>
-    {{ s.batch }}
-</td>
+            </thead>
 
 
-<td>
+            <tbody>
 
-{% if s.status == "Active" %}
+                {% for s in students %}
 
-<span class="badge bg-success">
-    Active
-</span>
+                <tr>
 
-{% else %}
+                    <td>
+                        {{ s.roll_no }}
+                    </td>
 
-<span class="badge bg-danger">
-    Inactive
-</span>
+                    <td>
+                        {{ s.name }}
+                        {{ s.father_name }}
+                        {{ s.surname }}
+                    </td>
 
-{% endif %}
+                    <td>
+                        {{ s.mobile }}
+                    </td>
 
-</td>
+                    <td>
+                        {{ s.course }}
+                    </td>
 
-
-
-<td>
-
-    <!-- View -->
-
-    <a
-        href="/view_student/{{ s.id }}"
-        class="btn btn-info btn-sm">
-
-        <i class="bi bi-eye"></i>
-
-    </a>
+                    <td>
+                        {{ s.batch }}
+                    </td>
 
 
-    {% if session.get("role") == "admin" %}
+                    <td>
 
-    <!-- Edit -->
+                        {% if s.status == "Active" %}
 
-    <a
-        href="/edit_student/{{ s.id }}"
-        class="btn btn-warning btn-sm">
+                        <span class="badge bg-success">
+                            Active
+                        </span>
 
-        <i class="bi bi-pencil"></i>
+                        {% else %}
 
-    </a>
+                        <span class="badge bg-danger">
+                            Inactive
+                        </span>
 
-    {% endif %}
+                        {% endif %}
 
-
-    <!-- ID Card -->
-
-    <a
-        href="/student_id_card/{{ s.id }}"
-        class="btn btn-dark btn-sm">
-
-        <i class="bi bi-person-vcard"></i>
-
-    </a>
+                    </td>
 
 
-    {% if session.get("role") == "admin" %}
+                    <td>
 
-    <!-- Delete -->
+                        <!-- View -->
 
-    <a
-        href="/delete_student/{{ s.id }}"
-        class="btn btn-danger btn-sm"
-        onclick="return confirm('Delete student?')">
+                        <a
+                            href="/view_student/{{ s.id }}"
+                            class="btn btn-info btn-sm">
 
-        <i class="bi bi-trash"></i>
+                            <i class="bi bi-eye"></i>
 
-    </a>
-
-    {% endif %}
-
-</td>
+                        </a>
 
 
-</tr>
+                        {% if session.get("role") == "admin" %}
 
-{% endfor %}
+                        <!-- Edit -->
 
-</tbody>
+                        <a
+                            href="/edit_student/{{ s.id }}"
+                            class="btn btn-warning btn-sm">
 
-</table>
+                            <i class="bi bi-pencil"></i>
 
-</div>
+                        </a>
+
+                        {% endif %}
+
+
+                        <!-- ID Card -->
+
+                        <a
+                            href="/student_id_card/{{ s.id }}"
+                            class="btn btn-dark btn-sm">
+
+                            <i class="bi bi-person-vcard"></i>
+
+                        </a>
+
+
+                        {% if session.get("role") == "admin" %}
+
+                        <!-- Delete -->
+
+                        <a
+                            href="/delete_student/{{ s.id }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete student?')">
+
+                            <i class="bi bi-trash"></i>
+
+                        </a>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
-<!-- PAGINATION -->
+
+<!-- ================= PAGINATION ================= -->
+
 {% if total_pages > 1 %}
 
-<nav class="mt-4"><ul class="pagination justify-content-center">
+<nav class="mt-4">
 
-    <!-- Previous -->
-
-    <li class="page-item {% if page == 1 %}disabled{% endif %}">
-
-        <a
-            class="page-link"
-            href="{{ url_for(
-                'students',
-                page=page-1,
-                search=search,
-                course=course,
-                batch=batch,
-                status=status
-            ) }}">
-
-            <i class="bi bi-chevron-left"></i>
-            Previous
-
-        </a>
-
-    </li>
+    <ul class="pagination justify-content-center">
 
 
-    <!-- First Page -->
+        <!-- Previous -->
 
-    <li class="page-item {% if page == 1 %}active{% endif %}">
-
-        <a
-            class="page-link"
-            href="{{ url_for(
-                'students',
-                page=1,
-                search=search,
-                course=course,
-                batch=batch,
-                status=status
-            ) }}">
-
-            1
-
-        </a>
-
-    </li>
-
-
-    <!-- Dots -->
-
-    {% if page > 3 %}
-
-    <li class="page-item disabled">
-
-        <span class="page-link">
-            ...
-        </span>
-
-    </li>
-
-    {% endif %}
-
-
-    <!-- Middle Pages -->
-
-    {% for p in range(2, total_pages) %}
-
-        {% if p >= page - 1 and p <= page + 1 %}
-
-        <li class="page-item {% if p == page %}active{% endif %}">
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
 
             <a
                 class="page-link"
                 href="{{ url_for(
                     'students',
-                    page=p,
+                    page=page-1,
                     search=search,
                     course=course,
                     batch=batch,
                     status=status
                 ) }}">
 
-                {{ p }}
+                <i class="bi bi-chevron-left"></i>
+                Previous
+
+            </a>
+
+        </li>
+
+
+        <!-- First Page -->
+
+        <li class="page-item {% if page == 1 %}active{% endif %}">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                    'students',
+                    page=1,
+                    search=search,
+                    course=course,
+                    batch=batch,
+                    status=status
+                ) }}">
+
+                1
+
+            </a>
+
+        </li>
+
+
+        <!-- Dots -->
+
+        {% if page > 3 %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                ...
+            </span>
+
+        </li>
+
+        {% endif %}
+
+
+        <!-- Middle Pages -->
+
+        {% for p in range(2, total_pages) %}
+
+            {% if p >= page - 1 and p <= page + 1 %}
+
+            <li class="page-item {% if p == page %}active{% endif %}">
+
+                <a
+                    class="page-link"
+                    href="{{ url_for(
+                        'students',
+                        page=p,
+                        search=search,
+                        course=course,
+                        batch=batch,
+                        status=status
+                    ) }}">
+
+                    {{ p }}
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <!-- Dots Before Last -->
+
+        {% if page < total_pages - 2 %}
+
+        <li class="page-item disabled">
+
+            <span class="page-link">
+                ...
+            </span>
+
+        </li>
+
+        {% endif %}
+
+
+        <!-- Last Page -->
+
+        {% if total_pages > 1 %}
+
+        <li class="page-item {% if page == total_pages %}active{% endif %}">
+
+            <a
+                class="page-link"
+                href="{{ url_for(
+                    'students',
+                    page=total_pages,
+                    search=search,
+                    course=course,
+                    batch=batch,
+                    status=status
+                ) }}">
+
+                {{ total_pages }}
 
             </a>
 
@@ -504,75 +568,33 @@
 
         {% endif %}
 
-    {% endfor %}
 
+        <!-- Next -->
 
-    <!-- Dots Before Last -->
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
 
-    {% if page < total_pages - 2 %}
+            <a
+                class="page-link"
+                href="{{ url_for(
+                    'students',
+                    page=page+1,
+                    search=search,
+                    course=course,
+                    batch=batch,
+                    status=status
+                ) }}">
 
-    <li class="page-item disabled">
+                Next
+                <i class="bi bi-chevron-right"></i>
 
-        <span class="page-link">
-            ...
-        </span>
+            </a>
 
-    </li>
+        </li>
 
-    {% endif %}
-
-
-    <!-- Last Page -->
-
-    {% if total_pages > 1 %}
-
-    <li class="page-item {% if page == total_pages %}active{% endif %}">
-
-        <a
-            class="page-link"
-            href="{{ url_for(
-                'students',
-                page=total_pages,
-                search=search,
-                course=course,
-                batch=batch,
-                status=status
-            ) }}">
-
-            {{ total_pages }}
-
-        </a>
-
-    </li>
-
-    {% endif %}
-
-
-    <!-- Next -->
-
-    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
-
-        <a
-            class="page-link"
-            href="{{ url_for(
-                'students',
-                page=page+1,
-                search=search,
-                course=course,
-                batch=batch,
-                status=status
-            ) }}">
-
-            Next
-            <i class="bi bi-chevron-right"></i>
-
-        </a>
-
-    </li>
-
-</ul>
+    </ul>
 
 </nav>
+
 {% endif %}
 
 {% endblock %}
