@@ -1,4 +1,4 @@
-# 🎓 Coaching Class Manager-PYTHON_INTERNSHIP
+# 🎓 Coaching Class Management-PYTHON_INTERNSHIP
 
 A web application built with Python and Flask.
 
@@ -8,9 +8,11 @@ https://anuradhakarhale.pythonanywhere.com
 ## 📋 Features
 - Student records management (Add, Edit, Delete, View)
 - Teacher records management (Add, Edit, Delete)
-- Search students  and teacher by name
+- Search & Filters – Easily search students and filter records by course, batch and status.
 - User registration and login
 - Admin panel — only admins can add/edit/delete
+- AI Assitant
+- Study Notes
 - Responsive design — works on mobile and desktop
 
 ## 🛠️ Tech Stack
